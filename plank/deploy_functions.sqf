@@ -198,7 +198,7 @@ plank_deploy_fnc_initUnitVariables = {
     FUN_ARGS_2(_unit,_fortifications);
 
     _unit setVariable ["plank_deploy_fortCounts", _fortifications, false];
-    _unit setVariable ["plank_deploy_fortIndex", -1, false];
+    [_unit] call plank_deploy_fnc_resetFort;
 };
 
 plank_deploy_fnc_init = {
