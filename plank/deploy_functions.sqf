@@ -128,8 +128,15 @@ plank_deploy_fnc_deleteFort = {
 plank_deploy_fnc_resetFort = {
     FUN_ARGS_1(_unit);
 
-    [-1, nil, nil, nil, nil, nil, nil] call plank_deploy_fnc_setFortVariables;
-    _unit setVariable ["plank_deploy_heightMode", nil, false];
+    _unit setVariable ["plank_deploy_fortIndex", -1, false];
+    private "_variableNames";
+    _variableNames = ["plank_deploy_fort", "plank_deploy_fortRelativeHeight", "plank_deploy_fortRelativeHeight",
+        "plank_deploy_fortDirection", "plank_deploy_fortDistance", "plank_deploy_fortPitch",
+        "plank_deploy_fortBank", "plank_deploy_heightMode"
+    ];
+    {
+        _unit setVariable [_x, nil, false];
+    } foreach _variableNames;
 };
 
 plank_deploy_fnc_reAddFortificationAction = {
