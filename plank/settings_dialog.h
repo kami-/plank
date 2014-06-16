@@ -165,7 +165,8 @@ class PlankSettingsDialog {
         idc = SETTINGS_HEIGHT_MODE_BUTTON_IDC;
         x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + RESET_BUTTON_BASE_W + CONTROL_MARGIN_RIGHT * 2;
         y = SETTINGS_CONTROL_BASE_Y(0);
-        text = "Terrain";
+        w = 0.2;
+        text = "Snap to Terrain";
         action = "[] call plank_ui_fnc_heightModeButtonClick";
         colorBackground[] = {1, 1, 1, 1};
         colorBackgroundActive[] = {1, 1, 1, 1};

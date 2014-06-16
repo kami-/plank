@@ -15,7 +15,7 @@
 #define STATE_PLACEMENT_DONE            2
 #define STATE_PLACEMENT_CANCELLED       3
 
-#define STR_HEIGHT_MODES                ["Terrian", "Player"]
+#define STR_HEIGHT_MODES                ["Snap to Terrain", "Relative to Player"]
 #define COLOR_HEIGHT_MODES              [[0, 1, 0, 1], [1, 0, 0, 1]]
 #define RELATIVE_TO_TERRAIN             0
 #define RELATIVE_TO_UNIT                1
