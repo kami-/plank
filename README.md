@@ -7,9 +7,10 @@ Usage
 =====
 
 1. Copy `\plank` directory into the mission directory
-2. Put line `#include "plank\settings_dialog.h"` in `description.ext`
+2. Put line `#include "plank\plank.h"` in `description.ext`
 3. Put line `call compile preprocessFileLineNumbers "plank\plank_init.sqf";` in `init.sqf`
-4. Call function to add fortifications to a unit with `[player, [2, 2, 2, 2, 2, 2, 2, 2]] call plank_deploy_fnc_init;`
+4. **ONLY FOR Arma 2: In the Editor you have to place the 'Functions' module on the map.**
+5. Call function to add fortifications to a unit with `[player, [2, 2, 2, 2, 2, 2, 2, 2]] call plank_deploy_fnc_init;`
 
 Fortifications
 ==============
