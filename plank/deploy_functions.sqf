@@ -155,7 +155,6 @@ plank_deploy_fnc_cancelFortPlacement = {
     _unit setVariable ["plank_deploy_placementState", STATE_PLACEMENT_CANCELLED, false];
     [_unit] call plank_deploy_fnc_removePlacementActions;
     [_unit, plank_deploy_fnc_deleteFort] call plank_deploy_fnc_reAddFortificationAction;
-    [_unit] call plank_deploy_fnc_resetDialogValues;
 };
 
 plank_deploy_fnc_decreaseFortCount = {
