@@ -17,7 +17,7 @@ Usage
 ##Ingame
 
 The player will have an action for each fortification with the available numbers.
-Using an action will create the selected fortification. The player can move freely while the fortification "follows" it around. While in the deployment mode, the player cannot create other fortifications, until the deployment is confirmed or cancelled. The player also gets 3 new actions:
+Using an action will create the selected fortification. The player can move freely while the fortification "follows" them around. While in the deployment mode, the player cannot create other fortifications, until the deployment is confirmed or cancelled. The player also gets 3 new actions:
 
 * **Confirm Deployment** - This action will deploy the fortification at its current position and properties. It decreses the available numbers of the fortification.
 * **Cancel Deployment** - This will cancel the deployment and "refunds" the fortification.
