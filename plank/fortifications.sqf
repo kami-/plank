@@ -15,6 +15,21 @@ plank_deploy_fortData = [
 
 // Action text                      |  Classname                            |  Distance     |  Direction     |  Direction Range  |  Code
 //--------------------------------------------------------------------------------------------------------------------------------------
+["Small bunker",                        "Land_BagBunker_Small_F",               6,              180,                360,            {}],
+["Bunker",                              "Land_BagBunker_Large_F",               8.5,            180,                60,             {}],
+["Wide Sandbag fence",                  "Land_BagFence_Long_F",                 4,              0,                  360,            {}],
+["H-Barrier watch tower",               "Land_HBarrierTower_F",                 15,             0,                  360,            {}],
+["Short Sandbag fence",                 "Land_BagFence_Short_F",                3,              0,                  360,            {}],
+["Razor Wire",                          "Land_Razorwire_F",                     6,              0,                  360,            {}],
+["Concrete wall long",                  "Land_CncWall4_F",                      8,              0,                  360,            {}],
+["Bunker Tower",                        "Land_BagBunker_Tower_F",               10,             0,                  360,            {}]
+
+];
+
+//------------------------------------------------------------------------------------------------------
+// Arma 2 fortifications
+//------------------------------------------------------------------------------------------------------
+/*
 ["Small bunker",                        "Land_fortified_nest_small",            6,              180,                360,            {}],
 ["Bunker",                              "Land_fortified_nest_big_EP1",          8.5,            180,                60,             {}],
 ["Wide Sandbag fence",                  "Land_fort_bagfence_long",              4,              0,                  360,            {}],
@@ -23,5 +38,4 @@ plank_deploy_fortData = [
 ["Razor Wire",                          "Fort_RazorWire",                       6,              0,                  360,            {}],
 ["Rampart",                             "Land_fort_rampart_EP1",                8,              0,                  360,            {}],
 ["Artillery Nest",                      "Land_fort_artillery_nest",             6,              0,                  60,             {}]
-
-];
+*/
