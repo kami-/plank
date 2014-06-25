@@ -1,66 +1,42 @@
-version=11;
+version=12;
 class Mission
 {
 	addOns[]=
 	{
-		"takistan",
-		"ca_modules_functions",
-		"cawheeled_e_stryker",
-		"CATracked_E_M2A2_Bradley",
-		"CAAir_E_UH60M",
-		"cacharacters2",
-		"CA_AH64D",
-		"caweapons_baf",
-		"CAWheeled2_MTVR",
-		"ace_sys_tracking",
-		"ibr_civilian_patch",
-		"ibr_isladuala",
-		"thirskw",
-		"RW_Wheeled",
-		"RW_Wheeled2_LAV25",
-		"RW_Tracked",
-		"caair"
+		"A3_Characters_F_BLUFOR",
+		"a3_characters_f",
+		"a3_map_altis"
 	};
 	addOnsAuto[]=
 	{
-		"ca_modules_functions",
-		"cacharacters2",
-		"takistan"
+		"A3_Characters_F_BLUFOR",
+		"a3_characters_f",
+		"a3_map_altis"
 	};
-	randomSeed=3165154;
+	randomSeed=6232753;
 	class Intel
 	{
-		briefingName="plank";
-		startWeather=0.25;
-		forecastWeather=0.25;
-		year=2008;
-		month=10;
-		day=11;
-		hour=8;
+		briefingName="plank_showcase";
+		overviewText="Plank showcase";
+		startWeather=0.29999998;
+		startWind=0.099999994;
+		startWaves=0.099999994;
+		forecastWeather=0.29999998;
+		forecastWind=0.099999994;
+		forecastWaves=0.099999994;
+		forecastLightnings=0.099999994;
+		year=2035;
+		month=6;
+		day=24;
+		hour=12;
 		minute=0;
+		startFogDecay=0.013;
+		forecastFogDecay=0.013;
 	};
 	class Groups
 	{
-		items=2;
+		items=1;
 		class Item0
-		{
-			side="LOGIC";
-			class Vehicles
-			{
-				items=1;
-				class Item0
-				{
-					position[]={8502.1416,340.57596,2616.5142};
-					id=0;
-					side="LOGIC";
-					vehicle="FunctionsManager";
-					leader=1;
-					lock="UNLOCKED";
-					skill=0.25;
-				};
-			};
-		};
-		class Item1
 		{
 			side="WEST";
 			class Vehicles
@@ -68,16 +44,13 @@ class Mission
 				items=1;
 				class Item0
 				{
-					position[]={8445.6865,306.02884,2445.179};
-					azimut=-317.54999;
-					special="NONE";
-					id=1;
+					position[]={12828.746,86.647293,16716.117};
+					id=0;
 					side="WEST";
-					vehicle="USMC_Soldier_SL";
+					vehicle="B_Soldier_F";
 					player="PLAYER COMMANDER";
 					leader=1;
-					rank="LIEUTENANT";
-					skill=0.5;
+					skill=0.60000002;
 				};
 			};
 		};
@@ -87,68 +60,89 @@ class Intro
 {
 	addOns[]=
 	{
-		"takistan",
-		"ibr_isladuala",
-		"thirskw"
+		"a3_map_altis"
 	};
 	addOnsAuto[]=
 	{
-		"takistan"
+		"a3_map_altis"
 	};
-	randomSeed=13119962;
+	randomSeed=5693082;
 	class Intel
 	{
-		startWeather=0.40000001;
-		forecastWeather=0.40000001;
-		year=2009;
-		day=28;
-		hour=16;
-		minute=20;
+		timeOfChanges=1800.0002;
+		startWeather=0.30000001;
+		startWind=0.1;
+		startWaves=0.1;
+		forecastWeather=0.30000001;
+		forecastWind=0.1;
+		forecastWaves=0.1;
+		forecastLightnings=0.1;
+		year=2035;
+		month=6;
+		day=24;
+		hour=12;
+		minute=0;
+		startFogDecay=0.013;
+		forecastFogDecay=0.013;
 	};
 };
 class OutroWin
 {
 	addOns[]=
 	{
-		"takistan",
-		"ibr_isladuala",
-		"thirskw"
+		"a3_map_altis"
 	};
 	addOnsAuto[]=
 	{
-		"takistan"
+		"a3_map_altis"
 	};
-	randomSeed=15231874;
+	randomSeed=461214;
 	class Intel
 	{
-		startWeather=0.40000001;
-		forecastWeather=0.40000001;
-		year=2009;
-		day=28;
-		hour=16;
-		minute=20;
+		timeOfChanges=1800.0002;
+		startWeather=0.30000001;
+		startWind=0.1;
+		startWaves=0.1;
+		forecastWeather=0.30000001;
+		forecastWind=0.1;
+		forecastWaves=0.1;
+		forecastLightnings=0.1;
+		year=2035;
+		month=6;
+		day=24;
+		hour=12;
+		minute=0;
+		startFogDecay=0.013;
+		forecastFogDecay=0.013;
 	};
 };
 class OutroLoose
 {
 	addOns[]=
 	{
-		"takistan",
-		"ibr_isladuala",
-		"thirskw"
+		"a3_map_altis"
 	};
 	addOnsAuto[]=
 	{
-		"takistan"
+		"a3_map_altis"
 	};
-	randomSeed=1525827;
+	randomSeed=2326551;
 	class Intel
 	{
-		startWeather=0.40000001;
-		forecastWeather=0.40000001;
-		year=2009;
-		day=28;
-		hour=16;
-		minute=20;
+		timeOfChanges=1800.0002;
+		startWeather=0.30000001;
+		startWind=0.1;
+		startWaves=0.1;
+		forecastWeather=0.30000001;
+		forecastWind=0.1;
+		forecastWaves=0.1;
+		forecastLightnings=0.1;
+		year=2035;
+		month=6;
+		day=24;
+		hour=12;
+		minute=0;
+		startFogDecay=0.013;
+		forecastFogDecay=0.013;
 	};
 };
