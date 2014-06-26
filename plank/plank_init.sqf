@@ -1,4 +1,9 @@
-#include "fortifications.sqf";
+// Check if Arma 2 or Arma 3
+if (isNil {call compile "blufor"}) then {
+    call compile preprocessFileLineNumbers "plank\arma2_fortifications.sqf";
+} else {
+    call compile preprocessFileLineNumbers "plank\arma3_fortifications.sqf";
+};
 
 plank_isInitialized = false;
 
