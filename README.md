@@ -1,7 +1,7 @@
 Plank
 =====
 
-Plank is a fortification deployment script for ArmA 2 and Arma 3.
+Plank is a fortification deployment script for ArmA 2 and Arma 3. The showcase mission only works for Arma 3!
 
 Usage
 =====
@@ -11,12 +11,7 @@ Usage
 1. Copy `\plank` directory into the mission directory
 2. Put line `#include "plank\plank.h"` in `description.ext`
 3. Put line `call compile preprocessFileLineNumbers "plank\plank_init.sqf";` in `init.sqf`
-4. **ONLY FOR Arma 2**
-  * Showcase mission doesn't work.
-  * In the Editor you have to place the `Functions` module on the map.
-  * In `\plank\settings_dialog.h` change the line `#define DEFAULT_FONT "puristaMedium"` to `#define DEFAULT_FONT "Zeppelin32"`
-  * In `\plank\fortifications.sqf` make sure you remove the Arma 3 fortification and use the Arma 2 ones.
-5. To add fortifications to a unit use `[_unit, [<number of 1. fort>, <number of 2. fort>, ..., <number of n. fort>]] call plank_deploy_fnc_init`. For example: `[player, [2, 1, 2, 2, 0, 2, 0, 0]] call plank_deploy_fnc_init;`
+4. To add fortifications to a unit use `[_unit, [<number of 1. fort>, <number of 2. fort>, ..., <number of n. fort>]] call plank_deploy_fnc_init`. For example: `[player, [2, 1, 2, 2, 0, 2, 0, 0]] call plank_deploy_fnc_init;`
 
 ##Ingame
 
@@ -34,7 +29,7 @@ You can find a [quick demo here](http://gfycat.com/BasicRemarkableFoxhound)
 Fortifications
 ==============
 
-To add new fortifications edit `\plank\fortifications.sqf`.
+To add new fortifications edit either `plank\arma2_fortifications.sqf` for Arma 2, or `plank\arma3_fortifications.sqf` for Arma 3.
 
 * **Action text** - The text displayed by the action.
 * **Classname** - The classname of the object to be placed.
