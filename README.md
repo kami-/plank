@@ -3,6 +3,12 @@ Plank
 
 Plank is a fortification deployment script for ArmA 2 and Arma 3. The showcase mission only works for Arma 3!
 
+* [Arma 2 screenshot](http://i.imgur.com/idesKIO.jpg)
+* [Arma 2 demo](http://gfycat.com/BasicRemarkableFoxhound)
+* [Arma 3 demo](http://gfycat.com/PitifulScientificAmazonparrot)
+
+Huge thanks to [ARK](http://ark-group.org/) for suggestions and testing.
+
 Usage
 =====
 
@@ -23,8 +29,6 @@ Using an action will create the selected fortification. The player can move free
 * **Open Settings** - Opens a dialog at the bottom right corner of screen. Here the player can set/reset the different properties of the fortification. Close the dialog with `ESC`, it will save the properties. The player cannot move while the dialog is open.
 
 After confirmation or cancellation of the fortification the player is free to place any of the other fortifications left.
-
-You can find a [quick demo here](http://gfycat.com/BasicRemarkableFoxhound)
 
 Fortifications
 ==============
