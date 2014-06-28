@@ -1,11 +1,15 @@
 Plank
 =====
 
-Plank is a fortification deployment script for ArmA 2 and Arma 3. The showcase mission only works for Arma 3!
+Plank is a simple but extremely useful open-source fortification script. It can be use in a broad spectrum, base building, FOB building or on-the-fly-defenses.It was designed in the mindset of simplicity with regards to both mission implementation and player use.
+
+A demonstration of how it works and looks ingame:
 
 * [Arma 2 screenshot](http://i.imgur.com/idesKIO.jpg)
 * [Arma 2 demo](http://gfycat.com/BasicRemarkableFoxhound)
 * [Arma 3 demo](http://gfycat.com/PitifulScientificAmazonparrot)
+
+Script works for both Arma 3 and Arma 2, (showcase mission works only for Arma 3) no alteration is needed in order for it to work in either of the games. Fully tested in MP without issues. This project is fully open-source (MIT license) so please feel free to contribute or fork as you require, but you must include the license file in your version.
 
 Huge thanks to [ARK](http://ark-group.org/) for suggestions and testing.
 
