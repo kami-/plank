@@ -1,7 +1,7 @@
 #include "plank_macros.h"
 
 // Magic to set default font for Arma 2 and Arma 3
-__EXEC(_plank_default_font = "puristaMedium"; while {isNil {call compile "blufor"}} do {_plank_default_font = "Zeppelin32"});
+__EXEC(_plank_default_font = "puristaMedium"; _stop = false; while {isNil {call compile "blufor"} && {!_stop}} do {_plank_default_font = "Zeppelin32"; _stop = true;};)
 
 #define SETTINGS_BASE_H                         0.82
 #define SETTINGS_BASE_W                         0.8
