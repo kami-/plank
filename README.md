@@ -21,7 +21,7 @@ Usage
 1. Copy `\plank` directory into the mission directory
 2. Put line `#include "plank\plank.h"` in `description.ext`
 3. Put line `call compile preprocessFileLineNumbers "plank\plank_init.sqf";` in `init.sqf`
-4. To add fortifications to a unit use `[_unit, [<number of 1. fort>, <number of 2. fort>, ..., <number of n. fort>]] call plank_deploy_fnc_init`. For example: `[player, [2, 1, 2, 2, 0, 2, 0, 0]] call plank_deploy_fnc_init;`
+4. To add fortifications to a unit use `[_unit, [<number of 1. fort>, <number of 2. fort>, ..., <number of n. fort>]] call plank_api_fnc_forceAddFortifications`. For example: `[player, [2, 1, 2, 2, 0, 2, 0, 0]] call plank_api_fnc_forceAddFortifications;`
 
 ##Ingame
 
