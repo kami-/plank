@@ -45,3 +45,8 @@ To add new fortifications edit either `plank\arma2_fortifications.sqf` for Arma 
 * **Direction** - Direction the object will be rotated initially, in degrees (minimum 0, maximum 360).
 * **Direction range** - The range you can turn the object, in degrees (minimum 0, maximum 360). This means that the player will be able to set the direction of the object between `direction - direction_range / 2` and `direction + direction_range / 2` degrees. For example given 180 direction and 60 direction range, player will be able turn the object between 150 and 210 degrees.
 * **Code** - A piece of code that will be executed when the object placement is confirmed. Set it to `{}`, if you don't want to use it. The unit who confirmed the placement and the object placed, are passed as arguments to the code. An example code that hints the players name could look like `{hint str (_this select 0);}`.
+
+
+## API
+
+For available functions check [api_function.sqf](https://github.com/kami-/plank/blob/master/plank/api_functions.sqf).
