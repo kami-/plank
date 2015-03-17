@@ -18,7 +18,7 @@ plank_deploy_fortData = [
 ["Small bunker",                        "Land_fortified_nest_small",            6,              180,                360,            {}],
 ["Bunker",                              "Land_fortified_nest_big_EP1",          8.5,            180,                60,             {}],
 ["Wide Sandbag fence",                  "Land_fort_bagfence_long",              4,              0,                  360,            {}],
-["Wide Sandbag half cirlce fence",      "Land_fort_bagfence_round",             7,              0,                  360,            {}],
+["Wide Sandbag half circle fence",      "Land_fort_bagfence_round",             7,              0,                  360,            {}],
 ["Narrow Sandbag fence",                "Land_BagFenceLong",                    3,              0,                  360,            {}],
 ["Razor Wire",                          "Fort_RazorWire",                       6,              0,                  360,            {}],
 ["Rampart",                             "Land_fort_rampart_EP1",                8,              0,                  360,            {}],
