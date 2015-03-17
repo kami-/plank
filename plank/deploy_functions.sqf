@@ -88,6 +88,18 @@ plank_deploy_fnc_removePlacementActions = {
     } foreach _actionIdNames;
 };
 
+plank_deploy_fnc_removeFortificationActions = {
+    FUN_ARGS_1(_unit);
+
+    private "_fortActionIds";
+    _fortActionIds = _unit getVariable ["plank_deploy_fortActionIds", []];
+    {
+        if (!isNil {_x}) then {
+            _unit removeAction _x;
+        };
+    } foreach _fortActionIds;
+};
+
 plank_deploy_fnc_updateFortPlacement = {
     FUN_ARGS_1(_unit);
 
@@ -109,6 +121,9 @@ plank_deploy_fnc_startFortPlacement = {
     FUN_ARGS_3(_unit,_actionId,_fortIndex);
 
     if ((_unit getVariable ["plank_deploy_placementState", STATE_PLACEMENT_INIT]) != STATE_PLACEMENT_IN_PROGRESS) then {
+        private "_fortActionIds";
+        _fortActionIds = _unit getVariable ["plank_deploy_fortActionIds", []];
+        _fortActionIds set [_fortIndex, nil];
         _unit removeAction _actionId;
         _unit setVariable ["plank_deploy_heightMode", RELATIVE_TO_UNIT, false];
         _unit setVariable ["plank_deploy_placementState", STATE_PLACEMENT_IN_PROGRESS, false];
@@ -157,6 +172,17 @@ plank_deploy_fnc_cancelFortPlacement = {
     [_unit, plank_deploy_fnc_deleteFort] call plank_deploy_fnc_reAddFortificationAction;
 };
 
+plank_delpoy_fnc_forceRemoveAllFortifications = {
+    FUN_ARGS_1(_unit);
+
+    [] call plank_ui_fnc_closeSettingsDialog;
+    _unit setVariable ["plank_deploy_placementState", STATE_PLACEMENT_CANCELLED, false];
+    [_unit] call plank_deploy_fnc_removePlacementActions;
+    [_unit] call plank_deploy_fnc_removeFortificationActions;
+    [_unit] call plank_deploy_fnc_deleteFort;
+    _unit setVariable ["plank_deploy_fortCounts", nil, false];
+};
+
 plank_deploy_fnc_decreaseFortCount = {
     FUN_ARGS_1(_unit);
 
@@ -182,7 +208,10 @@ plank_deploy_fnc_addFortificationAction = {
     FUN_ARGS_3(_unit,_count,_fortIndex);
 
     if (_count > 0 && {_unit getVariable ["plank_deploy_fortIndex", -1] != _fortIndex}) then {
-        _unit addAction [format ["Place %1 (%2 left)", GET_FORT_DISPLAY_NAME(_fortIndex), _count], "plank\place_fort_action.sqf", [_fortIndex], _fortIndex + 50, false, false, "", "driver _target == _this"];
+        private ["_actionId", "_fortActionIds"];
+        _actionId = _unit addAction [format ["Place %1 (%2 left)", GET_FORT_DISPLAY_NAME(_fortIndex), _count], "plank\place_fort_action.sqf", [_fortIndex], _fortIndex + 50, false, false, "", "driver _target == _this"];
+        _fortActionIds = _unit getVariable ["plank_deploy_fortActionIds", []];
+        _fortActionIds set [_fortIndex, _actionId];
     };
 };
 
@@ -197,6 +226,10 @@ plank_deploy_fnc_addFortificationActions = {
 plank_deploy_fnc_initUnitVariables = {
     FUN_ARGS_2(_unit,_fortifications);
 
+    private "_fortActionIds";
+    _fortActionIds = [];
+    _fortActionIds set [(count _fortifications) - 1, nil];
+    _unit setVariable ["plank_deploy_fortActionIds", _fortActionIds, false];
     _unit setVariable ["plank_deploy_fortCounts", _fortifications, false];
     [_unit] call plank_deploy_fnc_resetFort;
 };

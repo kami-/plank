@@ -10,6 +10,12 @@ plank_ui_fnc_createSettingsDialog = {
     };
 };
 
+plank_ui_fnc_closeSettingsDialog = {
+    if (dialog) then {
+        closeDialog 0;
+    };
+};
+
 plank_ui_fnc_resetHeightSlider = {
     sliderSetPosition [SETTINGS_HEIGHT_SLIDER_IDC, 0];
     [0] call plank_ui_fnc_updateHeightSliderValue;
