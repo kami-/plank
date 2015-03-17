@@ -237,6 +237,7 @@ plank_deploy_fnc_initUnitVariables = {
 plank_deploy_fnc_init = {
     FUN_ARGS_2(_unit,_fortifications);
 
+    [_unit] call plank_delpoy_fnc_forceRemoveAllFortifications;
     [_unit, _fortifications] call plank_deploy_fnc_initUnitVariables;
     [_unit] call plank_deploy_fnc_addFortificationActions;
 };
