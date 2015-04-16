@@ -17,6 +17,7 @@ if (!isDedicated) then {
     };
     call compile preProcessFileLineNumbers "plank\deploy_functions.sqf";
     call compile preProcessFileLineNumbers "plank\ui_functions.sqf";
+    call compile preProcessFileLineNumbers "plank\api_functions.sqf";
 
     plank_isInitialized = true;
 };
