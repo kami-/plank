@@ -17,7 +17,7 @@ plank_deploy_fnc_setFortPosition = {
 
     private ["_heightMode", "_newPostion"];
     _heightMode = _unit getVariable ["plank_deploy_heightMode", RELATIVE_TO_UNIT];
-    _newPostion = _unit modelToWorld [0, [_unit] call plank_deploy_fnc_getFortDistance, 0];
+    _newPostion = _unit modelToWorld [player getVariable ["plank_deploy_fortHorizontalOffset", 0], [_unit] call plank_deploy_fnc_getFortDistance, 0];
     call {
         if (_heightMode == RELATIVE_TO_TERRAIN) exitWith {
             _newPostion set [2, 0];
@@ -31,10 +31,11 @@ plank_deploy_fnc_setFortPosition = {
 };
 
 plank_deploy_fnc_setFortVariables = {
-    FUN_ARGS_7(_fortIndex,_fort,_relativeHeight,_direction,_distance,_pitch,_bank);
+    FUN_ARGS_8(_fortIndex,_fort,_relativeOffset,_relativeHeight,_direction,_distance,_pitch,_bank);
     
     _unit setVariable ["plank_deploy_fortIndex", _fortIndex, false];
     _unit setVariable ["plank_deploy_fort", _fort, false];
+    _unit setVariable ["plank_deploy_fortHorizontalOffset", _relativeOffset, false];
     _unit setVariable ["plank_deploy_fortRelativeHeight", _relativeHeight, false];
     _unit setVariable ["plank_deploy_fortDirection", _direction, false];
     _unit setVariable ["plank_deploy_fortDistance", _distance, false];
@@ -59,7 +60,7 @@ plank_deploy_fnc_createFortification = {
 
     private "_fort";
     _fort = createVehicle [GET_FORT_CLASS_NAME(_fortIndex), [0,0,0], [], 0, "NONE"];
-    [_fortIndex, _fort, 0, GET_FORT_DIRECTION(_fortIndex), GET_FORT_DISTANCE(_fortIndex), 0, 0] call plank_deploy_fnc_setFortVariables;
+    [_fortIndex, _fort, 0, 0, GET_FORT_DIRECTION(_fortIndex), GET_FORT_DISTANCE(_fortIndex), 0, 0] call plank_deploy_fnc_setFortVariables;
     [_unit, _fort, _fortIndex] call plank_deploy_fnc_setFortDirection;
     [_unit, _fort] call plank_deploy_fnc_setFortPosition;
 
@@ -149,9 +150,9 @@ plank_deploy_fnc_resetFort = {
 
     _unit setVariable ["plank_deploy_fortIndex", -1, false];
     private "_variableNames";
-    _variableNames = ["plank_deploy_fort", "plank_deploy_fortRelativeHeight", "plank_deploy_fortRelativeHeight",
-        "plank_deploy_fortDirection", "plank_deploy_fortDistance", "plank_deploy_fortPitch",
-        "plank_deploy_fortBank", "plank_deploy_heightMode"
+    _variableNames = ["plank_deploy_fort", "plank_deploy_fortRelativeHeight", "plank_deploy_fortHorizontalOffset",
+        "plank_deploy_fortRelativeHeight", "plank_deploy_fortDirection", "plank_deploy_fortDistance",
+        "plank_deploy_fortPitch", "plank_deploy_fortBank", "plank_deploy_heightMode"
     ];
     {
         _unit setVariable [_x, nil, false];

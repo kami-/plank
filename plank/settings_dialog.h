@@ -3,7 +3,7 @@
 // Magic to set default font for Arma 2 and Arma 3
 __EXEC(_plank_default_font = "puristaMedium"; _stop = false; while {isNil {call compile "blufor"} && {!_stop}} do {_plank_default_font = "Zeppelin32"; _stop = true;};)
 
-#define SETTINGS_BASE_H                         0.82
+#define SETTINGS_BASE_H                         1.22
 #define SETTINGS_BASE_W                         0.8
 
 #define SETTINGS_DIALOG_H                       SETTINGS_BASE_H
@@ -16,10 +16,11 @@ __EXEC(_plank_default_font = "puristaMedium"; _stop = false; while {isNil {call 
 #define CONTROL_MARGIN_BOTTOM                   0.03
 
 #define ROW_BASE_H                              0.035
-#define TITLE_BASE_W                            0.105
+#define TITLE_BASE_W                            0.11
 #define TITLE_BASE_H                            ROW_BASE_H
 #define VALUE_BASE_W                            0.11
 #define VALUE_BASE_H                            ROW_BASE_H
+#define STATE_BASE_W                            0.05
 #define SLIDER_BASE_W                           0.4
 #define SLIDER_BASE_H                           ROW_BASE_H
 #define RESET_BUTTON_BASE_W                     0.085
@@ -37,14 +38,23 @@ class PlankSettingsDialog {
     idd = SETTINGS_DIALOG_IDD;
     controlsBackground[] = {};
     objects[] = {};
-    onLoad = "uiNamespace setVariable ['plank_ui_settingsDialogIdd', _this select 0]";
+    onLoad = "uiNamespace setVariable ['plank_ui_settingsDialogIdd', _this select 0];";
+    onUnload = "[] call plank_ui_fnc_dialogOnUnload;";
     controls[] = {
         DialogBackground,
+        CtrlTitle,
+        CtrlValue,
+        ShiftTitle,
+        ShiftValue,
         HeightTitle,
         HeightModeButton,
         HeightSlider,
         HeightResetButton,
         HeightValue,
+        HorizontalOffsetTitle,
+        HorizontalOffsetSlider,
+        HorizontalOffsetResetButton,
+        HorizontalOffsetValue,
         DirectionTitle,
         DirectionSlider,
         DirectionResetButton,
@@ -157,17 +167,49 @@ class PlankSettingsDialog {
         SizeEx = 0.03921;
         text="Reset";
     };
+//--------------------------
+    class CtrlTitle : TitleBase {
+        idc = SETTINGS_CTRL_TITLE_IDC;
+        x = SETTINGS_CONTROL_BASE_X;
+        y = SETTINGS_CONTROL_BASE_Y(TOGGLE_ROW_INDEX);
+        text = "Ctrl";
+    };
 
+    class CtrlValue : ValueBase {
+        idc = SETTINGS_CTRL_VALUE_IDC;
+        x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
+        y = SETTINGS_CONTROL_BASE_Y(TOGGLE_ROW_INDEX);
+        w = STATE_BASE_W;
+        text = "Off";
+        colorText[] = {1, 0, 0, 1};
+    };
+
+    class ShiftTitle : TitleBase {
+        idc = SETTINGS_SHIFT_TITLE_IDC;
+        x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT + STATE_BASE_W + CONTROL_MARGIN_RIGHT * 3;
+        y = SETTINGS_CONTROL_BASE_Y(TOGGLE_ROW_INDEX);
+        text = "Shift";
+    };
+
+    class ShiftValue : ValueBase {
+        idc = SETTINGS_SHIFT_VALUE_IDC;
+        x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT + STATE_BASE_W + CONTROL_MARGIN_RIGHT * 3 + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
+        y = SETTINGS_CONTROL_BASE_Y(TOGGLE_ROW_INDEX);
+        w = STATE_BASE_W;
+        text = "Off";
+        colorText[] = {1, 0, 0, 1};
+    };
+//--------------------------
     class HeightTitle : TitleBase {
         idc = SETTINGS_HEIGHT_TITLE_IDC;
         x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(0);
+        y = SETTINGS_CONTROL_BASE_Y(HEIGHT_ROW_INDEX);
     };
 
     class HeightModeButton : ResetButtonBase {
         idc = SETTINGS_HEIGHT_MODE_BUTTON_IDC;
         x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + RESET_BUTTON_BASE_W + CONTROL_MARGIN_RIGHT * 2;
-        y = SETTINGS_CONTROL_BASE_Y(0);
+        y = SETTINGS_CONTROL_BASE_Y(HEIGHT_ROW_INDEX);
         w = 0.2;
         text = "Snap to Terrain";
         action = "[] call plank_ui_fnc_heightModeButtonClick";
@@ -179,128 +221,155 @@ class PlankSettingsDialog {
     class HeightSlider : SliderBase {
         idc = SETTINGS_HEIGHT_SLIDER_IDC;
         x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(0) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        y = SETTINGS_CONTROL_BASE_Y(HEIGHT_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
         onSliderPosChanged = "[_this select 1] call plank_ui_fnc_updateHeightSliderValue";
     };
     
     class HeightValue : ValueBase {
         idc = SETTINGS_HEIGHT_VALUE_IDC;
         x = SETTINGS_CONTROL_BASE_X + SLIDER_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(0) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        y = SETTINGS_CONTROL_BASE_Y(HEIGHT_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
     };
 
     class HeightResetButton : ResetButtonBase {
         idc = SETTINGS_HEIGHT_RESET_BUTTON_IDC;
         x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(0);
+        y = SETTINGS_CONTROL_BASE_Y(HEIGHT_ROW_INDEX);
         action = "[] call plank_ui_fnc_resetHeightSlider";
+    };
+//--------------------------
+    class HorizontalOffsetTitle : TitleBase {
+        idc = SETTINGS_HORIZONTAL_OFFSET_TITLE_IDC;
+        x = SETTINGS_CONTROL_BASE_X;
+        y = SETTINGS_CONTROL_BASE_Y(HORIZONTAL_OFFSET_ROW_INDEX);
+        text="Horizontal";
+    };
+
+    class HorizontalOffsetSlider : SliderBase {
+        idc = SETTINGS_HORIZONTAL_OFFSET_SLIDER_IDC;
+        x = SETTINGS_CONTROL_BASE_X;
+        y = SETTINGS_CONTROL_BASE_Y(HORIZONTAL_OFFSET_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        onSliderPosChanged = "[_this select 1] call plank_ui_fnc_updateHorizontalOffsetSliderValue";
+    };
+
+    class HorizontalOffsetValue : ValueBase {
+        idc = SETTINGS_HORIZONTAL_OFFSET_VALUE_IDC;
+        x = SETTINGS_CONTROL_BASE_X + SLIDER_BASE_W + CONTROL_MARGIN_RIGHT;
+        y = SETTINGS_CONTROL_BASE_Y(HORIZONTAL_OFFSET_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+    };
+
+    class HorizontalOffsetResetButton : ResetButtonBase {
+        idc = SETTINGS_HORIZONTAL_OFFSET_RESET_BUTTON_IDC;
+        x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
+        y = SETTINGS_CONTROL_BASE_Y(HORIZONTAL_OFFSET_ROW_INDEX);
+        action = "[] call plank_ui_fnc_resetHorizontalOffsetSlider";
     };
 //--------------------------
     class DirectionTitle : TitleBase {
         idc = SETTINGS_DIRECTION_TITLE_IDC;
         x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(1);
+        y = SETTINGS_CONTROL_BASE_Y(DIRECTION_ROW_INDEX);
         text="Direction";
     };
 
     class DirectionSlider : SliderBase {
         idc = SETTINGS_DIRECTION_SLIDER_IDC;
         x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(1) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        y = SETTINGS_CONTROL_BASE_Y(DIRECTION_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
         onSliderPosChanged = "[_this select 1] call plank_ui_fnc_updateDirectiontSliderValue";
     };
 
     class DirectionValue : ValueBase {
         idc = SETTINGS_DIRECTION_VALUE_IDC;
         x = SETTINGS_CONTROL_BASE_X + SLIDER_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(1) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        y = SETTINGS_CONTROL_BASE_Y(DIRECTION_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
     };
 
     class DirectionResetButton : ResetButtonBase {
         idc = SETTINGS_DIRECTION_RESET_BUTTON_IDC;
         x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(1);
+        y = SETTINGS_CONTROL_BASE_Y(DIRECTION_ROW_INDEX);
         action = "[] call plank_ui_fnc_resetDirectionSlider";
     };
 //--------------------------
     class DistanceTitle : TitleBase {
         idc = SETTINGS_DISTANCE_TITLE_IDC;
         x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(2);
+        y = SETTINGS_CONTROL_BASE_Y(DISTANCE_ROW_INDEX);
         text="Distance";
     };
 
     class DistanceSlider : SliderBase {
         idc = SETTINGS_DISTANCE_SLIDER_IDC;
         x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(2) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        y = SETTINGS_CONTROL_BASE_Y(DISTANCE_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
         onSliderPosChanged = "[_this select 1] call plank_ui_fnc_updateDistanceSliderValue";
     };
 
     class DistanceValue : ValueBase {
         idc = SETTINGS_DISTANCE_VALUE_IDC;
         x = SETTINGS_CONTROL_BASE_X + SLIDER_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(2) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        y = SETTINGS_CONTROL_BASE_Y(DISTANCE_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
     };
 
     class DistanceResetButton : ResetButtonBase {
         idc = SETTINGS_DISTANCE_RESET_BUTTON_IDC;
         x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(2);
+        y = SETTINGS_CONTROL_BASE_Y(DISTANCE_ROW_INDEX);
         action = "[] call plank_ui_fnc_resetDistanceSlider";
     };
 //--------------------------
     class PitchTitle : TitleBase {
         idc = SETTINGS_PITCH_TITLE_IDC;
         x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(3);
+        y = SETTINGS_CONTROL_BASE_Y(PITCH_ROW_INDEX);
         text="Pitch";
     };
 
     class PitchSlider : SliderBase {
         idc = SETTINGS_PITCH_SLIDER_IDC;
         x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(3) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        y = SETTINGS_CONTROL_BASE_Y(PITCH_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
         onSliderPosChanged = "[_this select 1] call plank_ui_fnc_updatePitchSliderValue";
     };
 
     class PitchValue : ValueBase {
         idc = SETTINGS_PITCH_VALUE_IDC;
         x = SETTINGS_CONTROL_BASE_X + SLIDER_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(3) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        y = SETTINGS_CONTROL_BASE_Y(PITCH_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
     };
 
     class PitchResetButton : ResetButtonBase {
         idc = SETTINGS_PITCH_RESET_BUTTON_IDC;
         x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(3);
+        y = SETTINGS_CONTROL_BASE_Y(PITCH_ROW_INDEX);
         action = "[] call plank_ui_fnc_resetPitchSlider";
     };
 //--------------------------
     class BankTitle : TitleBase {
         idc = SETTINGS_BANK_TITLE_IDC;
         x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(4);
+        y = SETTINGS_CONTROL_BASE_Y(BANK_ROW_INDEX);
         text="Bank";
     };
 
     class BankSlider : SliderBase {
         idc = SETTINGS_BANK_SLIDER_IDC;
         x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(4) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        y = SETTINGS_CONTROL_BASE_Y(BANK_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
         onSliderPosChanged = "[_this select 1] call plank_ui_fnc_updateBankSliderValue";
     };
 
     class BankValue : ValueBase {
         idc = SETTINGS_BANK_VALUE_IDC;
         x = SETTINGS_CONTROL_BASE_X + SLIDER_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(4) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        y = SETTINGS_CONTROL_BASE_Y(BANK_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
     };
 
     class BankResetButton : ResetButtonBase {
         idc = SETTINGS_BANK_RESET_BUTTON_IDC;
         x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(4);
+        y = SETTINGS_CONTROL_BASE_Y(BANK_ROW_INDEX);
         action = "[] call plank_ui_fnc_resetBankSlider";
     };
 //--------------------------
