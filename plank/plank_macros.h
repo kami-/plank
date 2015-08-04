@@ -32,21 +32,29 @@
 #define RELATIVE_TO_TERRAIN                     0
 #define RELATIVE_TO_UNIT                        1
 
+#define DEFAULT_FORT_INDEX                      0
 #define MIN_HEIGHT                              -10
 #define MAX_HEIGHT                              10
+#define DEFAULT_HEIGHT                          0
 #define MIN_HORIZONTAL_OFFSET                   -10
 #define MAX_HORIZONTAL_OFFSET                   10
+#define DEFAULT_HORIZONTAL_OFFSET               0
 #define MAX_DISTANCE_ADD                        20
+#define DEFAULT_DISTANCE                        0
 #define DIRECTION_RANGE                         40
+#define DEFAULT_DIRECTION                       0
 #define MIN_PITCH                               -120
 #define MAX_PITCH                               120
+#define DEFAULT_PITCH                           0
 #define MIN_BANK                                -180
 #define MAX_BANK                                360
+#define DEFAULT_BANK                            0
 
 
 #define SETTINGS_DIALOG_IDD                             143701
 
 #define SETTINGS_BACKGROUND_IDC                         143800
+#define SETTINGS_FORT_COMBO_IDC                         143801
 #define SETTINGS_CTRL_TITLE_IDC                         143805
 #define SETTINGS_CTRL_VALUE_IDC                         143806
 #define SETTINGS_SHIFT_TITLE_IDC                        143807
@@ -77,15 +85,16 @@
 #define SETTINGS_BANK_RESET_BUTTON_IDC                  143852
 #define SETTINGS_BANK_VALUE_IDC                         143853
 
-#define TOGGLE_ROW_INDEX                                0
-#define HEIGHT_ROW_INDEX                                1
-#define HORIZONTAL_OFFSET_ROW_INDEX                     2
-#define DIRECTION_ROW_INDEX                             3
-#define DISTANCE_ROW_INDEX                              4
-#define PITCH_ROW_INDEX                                 5
-#define BANK_ROW_INDEX                                  6
+#define FORT_LIST_ROW_INDEX                             0
+#define TOGGLE_ROW_INDEX                                1
+#define HEIGHT_ROW_INDEX                                2
+#define HORIZONTAL_OFFSET_ROW_INDEX                     3
+#define DIRECTION_ROW_INDEX                             4
+#define DISTANCE_ROW_INDEX                              5
+#define PITCH_ROW_INDEX                                 6
+#define BANK_ROW_INDEX                                  7
 
-
+#define FORT_COMBO_NONE_NAME                            "None"
 
 // WARNING
 // Macros are sensitive for "," (comma), "(", ")" (parenthese) and " " (space).
@@ -114,6 +123,7 @@
 #define PVT_7(VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7) private [#VAR1,#VAR2,#VAR3,#VAR4,#VAR5,#VAR6,#VAR7]
 #define PVT_8(VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7,VAR8) private [#VAR1,#VAR2,#VAR3,#VAR4,#VAR5,#VAR6,#VAR7,#VAR8]
 #define PVT_9(VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7,VAR8,VAR9) private [#VAR1,#VAR2,#VAR3,#VAR4,#VAR5,#VAR6,#VAR7,#VAR8,#VAR9]
+#define PVT_10(VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7,VAR8,VAR9,VAR10) private [#VAR1,#VAR2,#VAR3,#VAR4,#VAR5,#VAR6,#VAR7,#VAR8,#VAR9,#VAR10]
 
 
 // Creates array selection for arguments. Only works if the array is a variable!
@@ -135,6 +145,7 @@
 #define SELECT_7(ARRAY,VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7) SELECT_6(ARRAY,VAR1,VAR2,VAR3,VAR4,VAR5,VAR6); VAR7 = (ARRAY) select 6
 #define SELECT_8(ARRAY,VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7,VAR8) SELECT_7(ARRAY,VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7); VAR8 = (ARRAY) select 7
 #define SELECT_9(ARRAY,VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7,VAR8,VAR9) SELECT_8(ARRAY,VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7,VAR8); VAR9 = (ARRAY) select 8
+#define SELECT_10(ARRAY,VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7,VAR8,VAR9,VAR10) SELECT_9(ARRAY,VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7,VAR8,VAR9); VAR10 = (ARRAY) select 9
 
 // Creates private declarations and selection from given array for local variables.
 // Example:
@@ -183,6 +194,10 @@
     PVT_9(VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7,VAR8,VAR9); \
     SELECT_9(ARRAY,VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7,VAR8,VAR9)
 
+#define DECLARE_10(ARRAY,VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7,VAR8,VAR9,VAR10) \
+    PVT_10(VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7,VAR8,VAR9,VAR10); \
+    SELECT_10(ARRAY,VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7,VAR8,VAR9,VAR10)
+
 // Creates private declarations and selection from _this array for arguments.
 // Recommended for function/script argument processing.
 // Example:
@@ -221,6 +236,9 @@
 
 #define FUN_ARGS_9(VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7,VAR8,VAR9) \
     DECLARE_9(_this,VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7,VAR8,VAR9)
+
+#define FUN_ARGS_10(VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7,VAR8,VAR9,VAR10) \
+    DECLARE_10(_this,VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7,VAR8,VAR9,VAR10)
 
 // Adds a value to the end of an array.
 // Example:

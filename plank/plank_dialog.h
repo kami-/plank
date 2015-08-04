@@ -3,7 +3,7 @@
 // Magic to set default font for Arma 2 and Arma 3
 __EXEC(_plank_default_font = "puristaMedium"; _stop = false; while {isNil {call compile "blufor"} && {!_stop}} do {_plank_default_font = "Zeppelin32"; _stop = true;};)
 
-#define SETTINGS_BASE_H                         1.22
+#define SETTINGS_BASE_H                         1.42
 #define SETTINGS_BASE_W                         0.8
 
 #define SETTINGS_DIALOG_H                       SETTINGS_BASE_H
@@ -42,6 +42,7 @@ class PlankSettingsDialog {
     onUnload = "[] call plank_ui_fnc_dialogOnUnload;";
     controls[] = {
         DialogBackground,
+        FortCombo,
         CtrlTitle,
         CtrlValue,
         ShiftTitle,
@@ -166,6 +167,50 @@ class PlankSettingsDialog {
         h = RESET_BUTTON_BASE_H;
         SizeEx = 0.03921;
         text="Reset";
+    };
+
+    class RscCombo {
+        idc = -1;
+        w = TITLE_BASE_W * 3;
+        h = TITLE_BASE_H;
+        access = 0;
+        type = 4;
+        style = 0;
+        colorSelect[] = {0.023529,0,0.0313725,1};
+        colorText[] = {0.023529,0,0.0313725,1};
+        colorBackground[] = {0.95,0.95,0.95,1};
+        colorScrollbar[] = {0.023529,0,0.0313725,1};
+        soundSelect[] = {"",0.1,1};
+        soundExpand[] = {"",0.1,1};
+        soundCollapse[] = {"",0.1,1};
+        maxHistoryDelay = 1;
+        class ScrollBar {
+            color[] = {1,1,1,0.6};
+            colorActive[] = {1,1,1,1};
+            colorDisabled[] = {1,1,1,0.3};
+            shadow = 0;
+            thumb = "\ca\ui\data\ui_scrollbar_thumb_ca.paa";
+            arrowFull = "\ca\ui\data\ui_arrow_top_active_ca.paa";
+            arrowEmpty = "\ca\ui\data\ui_arrow_top_ca.paa";
+            border = "\ca\ui\data\ui_border_scroll_ca.paa";
+        };
+        shadow = 0;
+        colorSelectBackground[] = {0.8784,0.8471,0.651,1};
+        arrowEmpty = "\ca\ui\data\ui_arrow_combo_ca.paa";
+        arrowFull = "\ca\ui\data\ui_arrow_combo_active_ca.paa";
+        wholeHeight = 0.45;
+        color[] = {0,0,0,0.6};
+        colorActive[] = {0,0,0,1};
+        colorDisabled[] = {0,0,0,0.3};
+        font = __EVAL(_plank_default_font);
+        sizeEx = 0.03921;
+    };
+//--------------------------
+    class FortCombo : RscCombo {
+        idc = SETTINGS_FORT_COMBO_IDC;
+        x = SETTINGS_CONTROL_BASE_X;
+        y = SETTINGS_CONTROL_BASE_Y(FORT_LIST_ROW_INDEX);
+        onLBSelChanged = "_this call plank_ui_fnc_selectionChanged;";
     };
 //--------------------------
     class CtrlTitle : TitleBase {

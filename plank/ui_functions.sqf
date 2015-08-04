@@ -32,7 +32,7 @@ plank_ui_fnc_resetHorizontalOffsetSlider = {
 
 plank_ui_fnc_resetDirectionSlider = {
     private "_fortDirection";
-    _fortDirection = GET_FORT_DIRECTION((player getVariable "plank_deploy_fortIndex"));
+    _fortDirection = GET_FORT_DIRECTION(player getVariable "plank_deploy_fortIndex");
     sliderSetPosition [SETTINGS_DIRECTION_SLIDER_IDC, _fortDirection];
     [_fortDirection] call plank_ui_fnc_updateDirectiontSliderValue;
 };
@@ -131,34 +131,69 @@ plank_ui_fnc_initToggleValues = {
 };
 
 plank_ui_fnc_initSliders = {
+    _fortIndex = player getVariable ["plank_deploy_fortIndex", DEFAULT_FORT_INDEX];
     sliderSetRange [SETTINGS_HEIGHT_SLIDER_IDC, MIN_HEIGHT, MAX_HEIGHT];
     sliderSetRange [SETTINGS_HORIZONTAL_OFFSET_SLIDER_IDC, MIN_HORIZONTAL_OFFSET, MAX_HORIZONTAL_OFFSET];
     sliderSetRange [
         SETTINGS_DIRECTION_SLIDER_IDC,
-        GET_FORT_DIRECTION((player getVariable "plank_deploy_fortIndex")) - GET_FORT_DIRECTION_RANGE((player getVariable "plank_deploy_fortIndex")) / 2,
-        GET_FORT_DIRECTION((player getVariable "plank_deploy_fortIndex")) + GET_FORT_DIRECTION_RANGE((player getVariable "plank_deploy_fortIndex")) / 2
+        GET_FORT_DIRECTION(_fortIndex) - GET_FORT_DIRECTION_RANGE(_fortIndex) / 2,
+        GET_FORT_DIRECTION(_fortIndex) + GET_FORT_DIRECTION_RANGE(_fortIndex) / 2
     ];
-    sliderSetRange [SETTINGS_DISTANCE_SLIDER_IDC, GET_FORT_DISTANCE((player getVariable "plank_deploy_fortIndex")), GET_FORT_DISTANCE((player getVariable "plank_deploy_fortIndex")) + MAX_DISTANCE_ADD];
+    sliderSetRange [SETTINGS_DISTANCE_SLIDER_IDC, GET_FORT_DISTANCE(_fortIndex), GET_FORT_DISTANCE(_fortIndex) + MAX_DISTANCE_ADD];
     sliderSetRange [SETTINGS_PITCH_SLIDER_IDC, MIN_PITCH, MAX_PITCH];
     sliderSetRange [SETTINGS_BANK_SLIDER_IDC, MIN_BANK, MAX_BANK];
 };
 
 plank_ui_fnc_initSliderValues = {
-    sliderSetPosition [SETTINGS_HEIGHT_SLIDER_IDC, player getVariable ["plank_deploy_fortRelativeHeight", 0]];
-    sliderSetPosition [SETTINGS_HORIZONTAL_OFFSET_SLIDER_IDC, player getVariable ["plank_deploy_fortHorizontalOffset", 0]];
-    sliderSetPosition [SETTINGS_DIRECTION_SLIDER_IDC, player getVariable ["plank_deploy_fortDirection", GET_FORT_DIRECTION((player getVariable "plank_deploy_fortIndex"))]];
-    sliderSetPosition [SETTINGS_DISTANCE_SLIDER_IDC, player getVariable ["plank_deploy_fortDistance", GET_FORT_DISTANCE((player getVariable "plank_deploy_fortIndex"))]];
-    sliderSetPosition [SETTINGS_PITCH_SLIDER_IDC, player getVariable ["plank_deploy_fortPitch", 0]];
-    sliderSetPosition [SETTINGS_BANK_SLIDER_IDC, player getVariable ["plank_deploy_fortBank", 0]];
+    _fortIndex = player getVariable ["plank_deploy_fortIndex", DEFAULT_FORT_INDEX];
+    sliderSetPosition [SETTINGS_HEIGHT_SLIDER_IDC, player getVariable ["plank_deploy_fortRelativeHeight", DEFAULT_HEIGHT]];
+    sliderSetPosition [SETTINGS_HORIZONTAL_OFFSET_SLIDER_IDC, player getVariable ["plank_deploy_fortHorizontalOffset", DEFAULT_HORIZONTAL_OFFSET]];
+    sliderSetPosition [SETTINGS_PITCH_SLIDER_IDC, player getVariable ["plank_deploy_fortPitch", DEFAULT_PITCH]];
+    sliderSetPosition [SETTINGS_BANK_SLIDER_IDC, player getVariable ["plank_deploy_fortBank", DEFAULT_BANK]];
+    sliderSetPosition [SETTINGS_DIRECTION_SLIDER_IDC, player getVariable ["plank_deploy_fortDirection", GET_FORT_DIRECTION(_fortIndex)]];
+    sliderSetPosition [SETTINGS_DISTANCE_SLIDER_IDC, player getVariable ["plank_deploy_fortDistance", GET_FORT_DISTANCE(_fortIndex)]];
 };
 
 plank_ui_fnc_initSliderTextValues = {
-    ctrlSetText [SETTINGS_HEIGHT_VALUE_IDC, str (player getVariable ["plank_deploy_fortRelativeHeight", 0])];
-    ctrlSetText [SETTINGS_HORIZONTAL_OFFSET_VALUE_IDC, str (player getVariable ["plank_deploy_fortHorizontalOffset", 0])];
-    ctrlSetText [SETTINGS_DIRECTION_VALUE_IDC, str (player getVariable ["plank_deploy_fortDirection", GET_FORT_DIRECTION((player getVariable "plank_deploy_fortIndex"))])];
-    ctrlSetText [SETTINGS_DISTANCE_VALUE_IDC, str (player getVariable ["plank_deploy_fortDistance", GET_FORT_DISTANCE((player getVariable "plank_deploy_fortIndex"))])];
-    ctrlSetText [SETTINGS_PITCH_VALUE_IDC, str (player getVariable ["plank_deploy_fortPitch", 0])];
-    ctrlSetText [SETTINGS_BANK_VALUE_IDC, str (player getVariable ["plank_deploy_fortBank", 0])];
+    _fortIndex = player getVariable ["plank_deploy_fortIndex", DEFAULT_FORT_INDEX];
+    ctrlSetText [SETTINGS_HEIGHT_VALUE_IDC, str (player getVariable ["plank_deploy_fortRelativeHeight", DEFAULT_HEIGHT])];
+    ctrlSetText [SETTINGS_HORIZONTAL_OFFSET_VALUE_IDC, str (player getVariable ["plank_deploy_fortHorizontalOffset", DEFAULT_HORIZONTAL_OFFSET])];
+    ctrlSetText [SETTINGS_PITCH_VALUE_IDC, str (player getVariable ["plank_deploy_fortPitch", DEFAULT_PITCH])];
+    ctrlSetText [SETTINGS_BANK_VALUE_IDC, str (player getVariable ["plank_deploy_fortBank", DEFAULT_BANK])];
+    ctrlSetText [SETTINGS_DIRECTION_VALUE_IDC, str (player getVariable ["plank_deploy_fortDirection", GET_FORT_DIRECTION(_fortIndex)])];
+    ctrlSetText [SETTINGS_DISTANCE_VALUE_IDC, str (player getVariable ["plank_deploy_fortDistance", GET_FORT_DIRECTION(_fortIndex)])];
+};
+
+plank_ui_fnc_initFortCombo = {
+    lbClear SETTINGS_FORT_COMBO_IDC;
+    [] call plank_ui_fnc_addFortificationLabels;
+    lbSetCurSel [SETTINGS_FORT_COMBO_IDC, player getVariable ["plank_deploy_fortIndex", DEFAULT_FORT_INDEX]];
+};
+
+plank_ui_fnc_addFortificationLabel = {
+    FUN_ARGS_2(_fortCount,_fortIndex);
+
+    DECLARE(_label) = FORT_COMBO_NONE_NAME;
+    if (_fortIndex != DEFAULT_FORT_INDEX) then {
+        _label = format ["%1x %2", _fortCount, GET_FORT_DISPLAY_NAME(_fortIndex)];
+    };
+    lbAdd [SETTINGS_FORT_COMBO_IDC, _label];
+};
+
+plank_ui_fnc_addFortificationLabels = {
+    {
+        [_x, _forEachIndex] call plank_ui_fnc_addFortificationLabel;
+    } foreach (player getVariable ["plank_deploy_fortCounts", []]);
+};
+
+plank_ui_fnc_selectionChanged = {
+    FUN_ARGS_2(_control,_index);
+
+    if (_index > 0) then {
+        [player, _index] call plank_deploy_fnc_tryStartFortPlacement;
+    } else {
+        [player] call plank_deploy_fnc_cancelFortPlacement;
+    };
 };
 
 plank_ui_fnc_setHeightModeButton = {
@@ -197,8 +232,8 @@ plank_ui_fnc_onMouseMoving = {
             [_deltaX / 25, MIN_HORIZONTAL_OFFSET, MAX_HORIZONTAL_OFFSET, "plank_deploy_fortHorizontalOffset", SETTINGS_HORIZONTAL_OFFSET_SLIDER_IDC, SETTINGS_HORIZONTAL_OFFSET_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
         };
         if (plank_ui_isShiftToggled) exitWith {
-            [_deltaY, MIN_PITCH, MAX_PITCH, "plank_deploy_fortPitch", SETTINGS_PITCH_SLIDER_IDC, SETTINGS_PITCH_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
-            [_deltaX, MIN_BANK, MAX_BANK, "plank_deploy_fortBank", SETTINGS_BANK_SLIDER_IDC, SETTINGS_BANK_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
+            [-_deltaY, MIN_PITCH, MAX_PITCH, "plank_deploy_fortPitch", SETTINGS_PITCH_SLIDER_IDC, SETTINGS_PITCH_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
+            [-_deltaX, MIN_BANK, MAX_BANK, "plank_deploy_fortBank", SETTINGS_BANK_SLIDER_IDC, SETTINGS_BANK_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
         };
     };
 };
@@ -231,11 +266,16 @@ plank_ui_fnc_initDialog = {
     plank_ui_onKeyDownEhId = findDisplay 46 displayAddEventHandler ["KeyDown", "_this call plank_ui_fnc_onKeyDown;"];
     plank_ui_onMouseMovingEhId = findDisplay 46 displayAddEventHandler ["MouseMoving", "_this call plank_ui_fnc_onMouseMoving;"];
     plank_ui_onMouseZChangedEhId = findDisplay 46 displayAddEventHandler ["MouseZChanged", "_this call plank_ui_fnc_onMouseZChanged;"];
+    [] call plank_ui_fnc_initFortControls;
+    [] call plank_ui_fnc_initFortCombo;
+    [player getVariable ["plank_deploy_heightMode", RELATIVE_TO_UNIT]] call plank_ui_fnc_setHeightModeButton;
+};
+
+plank_ui_fnc_initFortControls = {
     [] call plank_ui_fnc_initToggleButtons;
     [] call plank_ui_fnc_initSliders;
     [] call plank_ui_fnc_initSliderValues;
     [] call plank_ui_fnc_initSliderTextValues;
-    [player getVariable ["plank_deploy_heightMode", RELATIVE_TO_UNIT]] call plank_ui_fnc_setHeightModeButton;
 };
 
 plank_ui_fnc_dialogOnUnload = {

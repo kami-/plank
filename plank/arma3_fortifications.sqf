@@ -15,6 +15,7 @@ plank_deploy_fortData = [
 
 // Action text                      |  Classname                            |  Distance     |  Direction     |  Direction Range  |  Code
 //--------------------------------------------------------------------------------------------------------------------------------------
+["None",                                "",                                     0,              0,                  0,              {}],
 ["Small bunker",                        "Land_BagBunker_Small_F",               6,              180,                360,            {}],
 ["Bunker",                              "Land_BagBunker_Large_F",               8.5,            180,                60,             {}],
 ["Wide Sandbag fence",                  "Land_BagFence_Long_F",                 4,              0,                  360,            {}],
