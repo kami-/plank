@@ -11,11 +11,10 @@
 //                    Set it to {}, if you don't want to use it. The unit who confirmed the placement and the object placed, are passed as arguments to the code.
 //                    An example code that hints the players name could look like {hint str (_this select 0);}.
 
-plank_deploy_fortData = [
+plank_deploy_manualFortData = [
 
 // Action text                      |  Classname                            |  Distance     |  Direction     |  Direction Range  |  Code
 //--------------------------------------------------------------------------------------------------------------------------------------
-["None",                                "",                                     0,              0,                  0,              {}],
 ["Small bunker",                        "Land_BagBunker_Small_F",               6,              180,                360,            {}],
 ["Bunker",                              "Land_BagBunker_Large_F",               8.5,            180,                60,             {}],
 ["Wide Sandbag fence",                  "Land_BagFence_Long_F",                 4,              0,                  360,            {}],

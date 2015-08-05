@@ -22,6 +22,8 @@ if (plank_isEnabled) then {
         call compile preprocessFileLineNumbers ADDON_PATH(arma3_fortifications.sqf);
     };
 
+    [] call plank_deploy_fnc_preInit;
+
     plank_isInitialized = true;
     ["plank.initialized", []] call plank_event_fnc_emitEvent;
     INFO("plank",FMT_1("Plank version '%1' has been successfully initialized.",STR_PLANK_VERSION));

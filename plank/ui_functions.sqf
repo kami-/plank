@@ -55,8 +55,7 @@ plank_ui_fnc_resetBankSlider = {
 };
 
 plank_ui_fnc_heightModeButtonClick = {
-    private "_heightMode";
-    _heightMode = player getVariable ["plank_deploy_heightMode", RELATIVE_TO_UNIT];
+    DECLARE(_heightMode) = player getVariable ["plank_deploy_heightMode", RELATIVE_TO_UNIT];
     call {
         if (_heightMode == RELATIVE_TO_TERRAIN) exitWith {
             _heightMode = RELATIVE_TO_UNIT;
@@ -66,6 +65,42 @@ plank_ui_fnc_heightModeButtonClick = {
         };
     };
     [_heightMode] call plank_ui_fnc_setHeightModeButton;
+};
+
+plank_ui_fnc_setHeightModeButton = {
+    FUN_ARGS_1(_heightMode);
+
+    player setVariable ["plank_deploy_heightMode", _heightMode, false];
+    ctrlSetText [SETTINGS_HEIGHT_MODE_BUTTON_IDC, STR_HEIGHT_MODES select _heightMode];
+};
+
+plank_ui_fnc_lockModeButtonClick = {
+    DECLARE(_lockMode) = player getVariable ["plank_deploy_lockMode", LOCK_MODE_UNLOCKED];
+    call {
+        if (_lockMode == LOCK_MODE_UNLOCKED) exitWith {
+            _lockMode = LOCK_MODE_LOCKED;
+        };
+        if (_lockMode == LOCK_MODE_LOCKED) exitWith {
+            _lockMode = LOCK_MODE_UNLOCKED;
+        };
+    };
+    [_lockMode] call plank_ui_fnc_setLockModeButton;
+};
+
+plank_ui_fnc_setLockModeButton = {
+    FUN_ARGS_1(_lockMode);
+
+    player setVariable ["plank_deploy_lockMode", _lockMode, false];
+    ctrlSetText [SETTINGS_LOCK_MODE_BUTTON_IDC, STR_LOCK_MODES select _lockMode];
+};
+
+plank_ui_fnc_confirmButtonClick = {
+    DECLARE(_fortIndex) = player getVariable ["plank_deploy_fortIndex", DEFAULT_FORT_INDEX];
+    if (_fortIndex != DEFAULT_FORT_INDEX) then {
+        [player] call plank_deploy_fnc_confirmFortPlacement;
+        [] call plank_ui_fnc_initFortControls;
+        [] call plank_ui_fnc_initFortCombo;
+    };
 };
 
 plank_ui_fnc_updateHeightSliderValue = {
@@ -131,7 +166,7 @@ plank_ui_fnc_initToggleValues = {
 };
 
 plank_ui_fnc_initSliders = {
-    _fortIndex = player getVariable ["plank_deploy_fortIndex", DEFAULT_FORT_INDEX];
+    DECLARE(_fortIndex) = player getVariable ["plank_deploy_fortIndex", DEFAULT_FORT_INDEX];
     sliderSetRange [SETTINGS_HEIGHT_SLIDER_IDC, MIN_HEIGHT, MAX_HEIGHT];
     sliderSetRange [SETTINGS_HORIZONTAL_OFFSET_SLIDER_IDC, MIN_HORIZONTAL_OFFSET, MAX_HORIZONTAL_OFFSET];
     sliderSetRange [
@@ -145,7 +180,7 @@ plank_ui_fnc_initSliders = {
 };
 
 plank_ui_fnc_initSliderValues = {
-    _fortIndex = player getVariable ["plank_deploy_fortIndex", DEFAULT_FORT_INDEX];
+    DECLARE(_fortIndex) = player getVariable ["plank_deploy_fortIndex", DEFAULT_FORT_INDEX];
     sliderSetPosition [SETTINGS_HEIGHT_SLIDER_IDC, player getVariable ["plank_deploy_fortRelativeHeight", DEFAULT_HEIGHT]];
     sliderSetPosition [SETTINGS_HORIZONTAL_OFFSET_SLIDER_IDC, player getVariable ["plank_deploy_fortHorizontalOffset", DEFAULT_HORIZONTAL_OFFSET]];
     sliderSetPosition [SETTINGS_PITCH_SLIDER_IDC, player getVariable ["plank_deploy_fortPitch", DEFAULT_PITCH]];
@@ -155,7 +190,7 @@ plank_ui_fnc_initSliderValues = {
 };
 
 plank_ui_fnc_initSliderTextValues = {
-    _fortIndex = player getVariable ["plank_deploy_fortIndex", DEFAULT_FORT_INDEX];
+    DECLARE(_fortIndex) = player getVariable ["plank_deploy_fortIndex", DEFAULT_FORT_INDEX];
     ctrlSetText [SETTINGS_HEIGHT_VALUE_IDC, str (player getVariable ["plank_deploy_fortRelativeHeight", DEFAULT_HEIGHT])];
     ctrlSetText [SETTINGS_HORIZONTAL_OFFSET_VALUE_IDC, str (player getVariable ["plank_deploy_fortHorizontalOffset", DEFAULT_HORIZONTAL_OFFSET])];
     ctrlSetText [SETTINGS_PITCH_VALUE_IDC, str (player getVariable ["plank_deploy_fortPitch", DEFAULT_PITCH])];
@@ -171,7 +206,7 @@ plank_ui_fnc_initFortCombo = {
 };
 
 plank_ui_fnc_addFortificationLabel = {
-    FUN_ARGS_2(_fortCount,_fortIndex);
+    FUN_ARGS_2(_fortIndex,_fortCount);
 
     DECLARE(_label) = FORT_COMBO_NONE_NAME;
     if (_fortIndex != DEFAULT_FORT_INDEX) then {
@@ -181,26 +216,23 @@ plank_ui_fnc_addFortificationLabel = {
 };
 
 plank_ui_fnc_addFortificationLabels = {
+    private ["_mapping", "_fortCounts"];
+    _mapping = [player] call plank_deploy_fnc_getLabelToFortMapping;
+    _fortCounts = player getVariable ["plank_deploy_fortCounts", []];
     {
-        [_x, _forEachIndex] call plank_ui_fnc_addFortificationLabel;
-    } foreach (player getVariable ["plank_deploy_fortCounts", []]);
+        [_x, _fortCounts select _x] call plank_ui_fnc_addFortificationLabel;
+    } foreach _mapping;
 };
 
 plank_ui_fnc_selectionChanged = {
     FUN_ARGS_2(_control,_index);
 
     if (_index > 0) then {
-        [player, _index] call plank_deploy_fnc_tryStartFortPlacement;
+        DECLARE(_mapping) = [player] call plank_deploy_fnc_getLabelToFortMapping;
+        [player, _mapping select _index] call plank_deploy_fnc_tryStartFortPlacement;
     } else {
         [player] call plank_deploy_fnc_cancelFortPlacement;
     };
-};
-
-plank_ui_fnc_setHeightModeButton = {
-    FUN_ARGS_1(_heightMode);
-
-    player setVariable ["plank_deploy_heightMode", _heightMode, false];
-    ctrlSetText [SETTINGS_HEIGHT_MODE_BUTTON_IDC, STR_HEIGHT_MODES select _heightMode];
 };
 
 plank_ui_fnc_updateValueAndSlider = {
@@ -276,6 +308,7 @@ plank_ui_fnc_initFortControls = {
     [] call plank_ui_fnc_initSliders;
     [] call plank_ui_fnc_initSliderValues;
     [] call plank_ui_fnc_initSliderTextValues;
+    [player getVariable ["plank_deploy_lockMode", LOCK_MODE_UNLOCKED]] call plank_ui_fnc_setLockModeButton;
 };
 
 plank_ui_fnc_dialogOnUnload = {

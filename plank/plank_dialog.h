@@ -3,7 +3,7 @@
 // Magic to set default font for Arma 2 and Arma 3
 __EXEC(_plank_default_font = "puristaMedium"; _stop = false; while {isNil {call compile "blufor"} && {!_stop}} do {_plank_default_font = "Zeppelin32"; _stop = true;};)
 
-#define SETTINGS_BASE_H                         1.42
+#define SETTINGS_BASE_H                         1.62
 #define SETTINGS_BASE_W                         0.8
 
 #define SETTINGS_DIALOG_H                       SETTINGS_BASE_H
@@ -43,6 +43,8 @@ class PlankSettingsDialog {
     controls[] = {
         DialogBackground,
         FortCombo,
+        ConfirmButton,
+        LockModeButton,
         CtrlTitle,
         CtrlValue,
         ShiftTitle,
@@ -213,6 +215,28 @@ class PlankSettingsDialog {
         onLBSelChanged = "_this call plank_ui_fnc_selectionChanged;";
     };
 //--------------------------
+    class ConfirmButton : RscButton {
+        idc = SETTINGS_CONFIRM_BUTTON_IDC;
+        x = SETTINGS_CONTROL_BASE_X;
+        y = SETTINGS_CONTROL_BASE_Y(FORT_CONFIRM_LOCK_ROW_INDEX);
+        w = RESET_BUTTON_BASE_W;
+        h = RESET_BUTTON_BASE_H;
+        SizeEx = 0.03921;
+        text = "Confirm";
+        action = "[] call plank_ui_fnc_confirmButtonClick";
+    };
+
+    class LockModeButton : RscButton {
+        idc = SETTINGS_LOCK_MODE_BUTTON_IDC;
+        x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
+        y = SETTINGS_CONTROL_BASE_Y(FORT_CONFIRM_LOCK_ROW_INDEX);
+        w = RESET_BUTTON_BASE_W;
+        h = RESET_BUTTON_BASE_H;
+        SizeEx = 0.03921;
+        text = "Lock";
+        action = "[] call plank_ui_fnc_lockModeButtonClick";
+    };
+//--------------------------
     class CtrlTitle : TitleBase {
         idc = SETTINGS_CTRL_TITLE_IDC;
         x = SETTINGS_CONTROL_BASE_X;
@@ -224,7 +248,6 @@ class PlankSettingsDialog {
         idc = SETTINGS_CTRL_VALUE_IDC;
         x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
         y = SETTINGS_CONTROL_BASE_Y(TOGGLE_ROW_INDEX);
-        w = STATE_BASE_W;
         text = "Off";
         colorText[] = {1, 0, 0, 1};
     };
