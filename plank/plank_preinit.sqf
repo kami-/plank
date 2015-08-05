@@ -14,6 +14,7 @@ if (plank_isEnabled) then {
     [] call plank_event_fnc_init;
     [] call compile preProcessFileLineNumbers ADDON_PATH(deploy_functions.sqf);
     [] call compile preProcessFileLineNumbers ADDON_PATH(ui_functions.sqf);
+    [] call compile preProcessFileLineNumbers ADDON_PATH(export_functions.sqf);
     [] call compile preProcessFileLineNumbers ADDON_PATH(api_functions.sqf);
 
     if (isNil {blufor}) then {
@@ -23,6 +24,7 @@ if (plank_isEnabled) then {
     };
 
     [] call plank_deploy_fnc_preInit;
+    [] call plank_export_fnc_preInit;
 
     plank_isInitialized = true;
     ["plank.initialized", []] call plank_event_fnc_emitEvent;

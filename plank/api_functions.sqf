@@ -22,3 +22,11 @@ plank_api_fnc_forceAddFortifications = {
 
     [_unit, _fortifications] call plank_deploy_fnc_init;
 };
+
+/**
+ * Exports fortification placed by the player as a script to the clipboard.
+ * Only works in single player!
+ */
+plank_api_fnc_export = {
+    [] call plank_export_fnc_export;
+};

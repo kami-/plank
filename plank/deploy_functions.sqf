@@ -155,9 +155,11 @@ plank_deploy_fnc_cancelFortPlacement = {
 plank_deploy_fnc_confirmFortPlacement = {
     FUN_ARGS_1(_unit);
 
+    DECLARE(_fort) = _unit getVariable "plank_deploy_fort";
     _unit setVariable ["plank_deploy_placementState", STATE_PLACEMENT_DONE, false];
     [_unit] call plank_deploy_fnc_decreaseFortCount;
-    [_unit, _unit getVariable "plank_deploy_fort"] call GET_FORT_CODE(_unit getVariable "plank_deploy_fortIndex");
+    [_unit, _fort] call plank_export_fnc_addFort;
+    [_unit, _fort] call GET_FORT_CODE(_unit getVariable "plank_deploy_fortIndex");
     [_unit] call plank_deploy_fnc_resetFort;
 };
 
