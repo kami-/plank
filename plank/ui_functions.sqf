@@ -208,28 +208,30 @@ plank_ui_fnc_initFortCombo = {
 plank_ui_fnc_addFortificationLabel = {
     FUN_ARGS_2(_fortIndex,_fortCount);
 
-    DECLARE(_label) = FORT_COMBO_NONE_NAME;
+    private ["_label", "_index"];
+    _label = FORT_COMBO_NONE_NAME;
     if (_fortIndex != DEFAULT_FORT_INDEX) then {
         _label = format ["%1x %2", _fortCount, GET_FORT_DISPLAY_NAME(_fortIndex)];
     };
-    lbAdd [SETTINGS_FORT_COMBO_IDC, _label];
+    _index = lbAdd [SETTINGS_FORT_COMBO_IDC, _label];
+    lbSetValue [SETTINGS_FORT_COMBO_IDC, _index, _fortIndex];
+    lbSetData [SETTINGS_FORT_COMBO_IDC, _index, "aaaaaaaaaaaaa"];
 };
 
 plank_ui_fnc_addFortificationLabels = {
-    private ["_mapping", "_fortCounts"];
-    _mapping = [player] call plank_deploy_fnc_getLabelToFortMapping;
+    private ["_fortIndexes", "_fortCounts"];
+    _fortIndexes = [player] call plank_deploy_fnc_getNonZeroFortIndexes;
     _fortCounts = player getVariable ["plank_deploy_fortCounts", []];
     {
         [_x, _fortCounts select _x] call plank_ui_fnc_addFortificationLabel;
-    } foreach _mapping;
+    } foreach _fortIndexes;
 };
 
 plank_ui_fnc_selectionChanged = {
     FUN_ARGS_2(_control,_index);
 
     if (_index > 0) then {
-        DECLARE(_mapping) = [player] call plank_deploy_fnc_getLabelToFortMapping;
-        [player, _mapping select _index] call plank_deploy_fnc_tryStartFortPlacement;
+        [player, lbValue [SETTINGS_FORT_COMBO_IDC, _index]] call plank_deploy_fnc_tryStartFortPlacement;
     } else {
         [player] call plank_deploy_fnc_cancelFortPlacement;
     };

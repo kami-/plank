@@ -8,17 +8,17 @@ plank_deploy_fnc_preInit = {
     PUSH_ALL(FORTS_DATA,plank_deploy_manualFortData);
 };
 
-plank_deploy_fnc_getLabelToFortMapping = {
+plank_deploy_fnc_getNonZeroFortIndexes = {
     FUN_ARGS_1(_unit);
 
-    private ["_mapping", "_fortCounts"];
-    _mapping = [];
+    private ["_fortIndexes", "_fortCounts"];
+    _fortIndexes = [];
     _fortCounts = _unit getVariable ["plank_deploy_fortCounts", []];
     {
-        if (_x > 0) then { PUSH(_mapping,_forEachIndex); };
+        if (_x > 0) then { PUSH(_fortIndexes,_forEachIndex); };
     } foreach _fortCounts;
 
-    _mapping;
+    _fortIndexes;
 };
 
 plank_deploy_fnc_setFortDirection = {
