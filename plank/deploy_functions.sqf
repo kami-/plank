@@ -91,11 +91,13 @@ plank_deploy_fnc_createFortification = {
     _fort;
 };
 
-plank_deploy_fnc_addPlankActions = {
+plank_deploy_fnc_addPlankAction = {
     FUN_ARGS_1(_unit);
 
-    DECLARE(_plankActionId) = _unit addAction ['<t color="#3748E3">Plank</t>', ADDON_PATH(plank_action.sqf), [], 100, false, false, "", "driver _target == _this"];
-    _unit setVariable ["plank_deploy_plankActionId", _plankActionId, false];
+    if (isNil {_unit getVariable "plank_deploy_plankActionId"}) then {
+        DECLARE(_plankActionId) = _unit addAction ['<t color="#3748E3">Plank</t>', ADDON_PATH(plank_action.sqf), [], 100, false, false, "", "driver _target == _this"];
+        _unit setVariable ["plank_deploy_plankActionId", _plankActionId, false];
+    };
 };
 
 plank_deploy_fnc_removePlankAction = {
@@ -243,5 +245,5 @@ plank_deploy_fnc_init = {
 
     [_unit] call plank_delpoy_fnc_forceRemoveAllFortifications;
     [_unit, _fortifications] call plank_deploy_fnc_initUnitVariables;
-    [_unit] call plank_deploy_fnc_addPlankActions;
+    [_unit] call plank_deploy_fnc_addPlankAction;
 };
