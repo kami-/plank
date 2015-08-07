@@ -106,6 +106,7 @@ plank_deploy_fnc_removePlankAction = {
     DECLARE(_actionId) = _unit getVariable "plank_deploy_plankActionId";
     if (!isNil {_actionId}) then {
         _unit removeAction _actionId;
+        _unit setVariable ["plank_deploy_plankActionId", nil, false];
     };
 };
 
