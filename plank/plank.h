@@ -2,5 +2,5 @@
 #include "plank_dialog.h"
 
 class Plank {
-    isEnabled = 1;
+    isEnabled = 0;
 };
