@@ -24,6 +24,40 @@ plank_api_fnc_forceAddFortifications = {
 };
 
 /**
+ * Returns the available fortification names and their indexes.
+ * @return Array of fortification name, index pairs
+ */
+plank_api_fnc_getFortifications = {
+    [] call plank_deploy_fnc_getFortifications;
+};
+
+/**
+ * Adds given number of fortifications by index.
+ * Cancels any ongoing deployment.
+ * @param _unit The unit to add the fortifications to
+ * @param _fortIndex The index of the fortification (use plank_api_fnc_getFortifications to get indexes)
+ * @param _count Number of fortifications to add
+ */
+plank_api_fnc_addFortification = {
+    FUN_ARGS_3(_unit,_fortIndex,_count);
+
+    [_unit, _fortIndex, _count] call plank_deploy_fnc_addFortification;
+};
+
+/**
+ * Removes given number of fortifications by index.
+ * Cancels any ongoing deployment.
+ * @param _unit The unit to remove the fortifications from
+ * @param _fortIndex The index of the fortification (use plank_api_fnc_getFortifications to get indexes)
+ * @param _count Number of fortifications to remove
+ */
+plank_api_fnc_removeFortification = {
+    FUN_ARGS_3(_unit,_fortIndex,_count);
+
+    [_unit, _fortIndex, _count] call plank_deploy_fnc_removeFortification;
+};
+
+/**
  * Exports fortification placed by the player as a script to the clipboard.
  * Only works in single player!
  */

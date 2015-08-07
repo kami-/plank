@@ -159,7 +159,7 @@ plank_deploy_fnc_confirmFortPlacement = {
 
     DECLARE(_fort) = _unit getVariable "plank_deploy_fort";
     _unit setVariable ["plank_deploy_placementState", STATE_PLACEMENT_DONE, false];
-    [_unit] call plank_deploy_fnc_decreaseFortCount;
+    [_unit, _unit getVariable ["plank_deploy_fortIndex", DEFAULT_FORT_INDEX], 1] call plank_deploy_fnc_decreaseFortCount;
     [_unit, _fort] call plank_export_fnc_addFort;
     [_unit, _fort] call GET_FORT_CODE(_unit getVariable "plank_deploy_fortIndex");
     [_unit] call plank_deploy_fnc_resetFort;
@@ -184,21 +184,26 @@ plank_deploy_fnc_resetFort = {
 plank_delpoy_fnc_forceRemoveAllFortifications = {
     FUN_ARGS_1(_unit);
 
-    [] call plank_ui_fnc_closeSettingsDialog;
-    _unit setVariable ["plank_deploy_placementState", STATE_PLACEMENT_CANCELLED, false];
+    [_unit] call plank_deploy_fnc_forceResetPlacement;
     [_unit] call plank_deploy_fnc_removePlankAction;
-    [_unit] call plank_deploy_fnc_deleteFort;
     _unit setVariable ["plank_deploy_fortCounts", nil, false];
 };
 
-plank_deploy_fnc_decreaseFortCount = {
+plank_deploy_fnc_forceResetPlacement = {
     FUN_ARGS_1(_unit);
 
-    private ["_fortIndex", "_fortCounts"];
-    _fortIndex = _unit getVariable ["plank_deploy_fortIndex", DEFAULT_FORT_INDEX];
-    _fortCounts = _unit getVariable ["plank_deploy_fortCounts", []];
-    if (_fortIndex != DEFAULT_FORT_INDEX && {count _fortCounts >= _fortIndex}) then {
-        _fortCounts set [_fortIndex, (_fortCounts select _fortIndex) - 1];
+    [] call plank_ui_fnc_closeSettingsDialog;
+    _unit setVariable ["plank_deploy_placementState", STATE_PLACEMENT_CANCELLED, false];
+    _unit setVariable ["plank_deploy_fortIndex", DEFAULT_FORT_INDEX, false];
+    [_unit] call plank_deploy_fnc_deleteFort;
+};
+
+plank_deploy_fnc_decreaseFortCount = {
+    FUN_ARGS_3(_unit,_fortIndex,_count);
+
+    DECLARE(_fortCounts) = _unit getVariable ["plank_deploy_fortCounts", []];
+    if (_fortIndex > DEFAULT_FORT_INDEX && {count _fortCounts > _fortIndex} && {_fortCounts select _fortIndex > 0}) then {
+        _fortCounts set [_fortIndex, ((_fortCounts select _fortIndex) - _count) max 0];
         if ([_unit] call plank_deploy_fnc_isFortsCountEmpty) then {
             [_unit] call plank_delpoy_fnc_forceRemoveAllFortifications;
         };
@@ -238,6 +243,42 @@ plank_deploy_fnc_shiftFortifications = {
     } foreach _fortifications;
 
     _shifted;
+};
+
+plank_deploy_fnc_getFortifications = {
+    DECLARE(_forts) = [];
+    for "_i" from 1 to (count FORTS_DATA) - 1 do {
+        DECLARE(_fortNameAndIndex) = [FORTS_DATA select _i select 0, _i];
+        PUSH(_forts,_fortNameAndIndex);
+    };
+
+    _forts;
+};
+
+plank_deploy_fnc_addFortification = {
+    FUN_ARGS_3(_unit,_fortIndex,_count);
+
+    if (_fortIndex > 0 && {_fortIndex < count FORTS_DATA}) then {
+        DECLARE(_fortCounts) = _unit getVariable ["plank_deploy_fortCounts", []];
+        [_unit] call plank_deploy_fnc_forceResetPlacement;
+        _fortCounts set [_fortIndex, (_fortCounts select _fortIndex) + _count];
+        [_unit] call plank_deploy_fnc_addPlankAction;
+    };
+};
+
+plank_deploy_fnc_removeFortification = {
+    FUN_ARGS_3(_unit,_fortIndex,_count);
+
+    DECLARE(_fortCounts) = _unit getVariable ["plank_deploy_fortCounts", []];
+    if (_fortIndex > 0 && {_fortIndex < count FORTS_DATA} && {_fortCounts select _fortIndex > 0}) then {
+        DECLARE(_newCount) = ((_fortCounts select _fortIndex) - _count) max 0;
+        _fortCounts set [_fortIndex, _newCount];
+        if ([_unit] call plank_deploy_fnc_isFortsCountEmpty) then {
+            [_unit] call plank_delpoy_fnc_forceRemoveAllFortifications;
+        } else {
+            [_unit] call plank_deploy_fnc_forceResetPlacement;
+        };
+    };
 };
 
 plank_deploy_fnc_init = {
