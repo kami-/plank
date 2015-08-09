@@ -13,7 +13,7 @@ plank_deploy_fnc_getNonZeroFortIndexes = {
 
     private ["_fortIndexes", "_fortCounts"];
     _fortIndexes = [];
-    _fortCounts = _unit getVariable ["plank_deploy_fortCounts", []];
+    _fortCounts = _unit getVariable ["plank_deploy_fortCounts", [1]];
     {
         if (_x > 0) then { PUSH(_fortIndexes,_forEachIndex); };
     } foreach _fortCounts;
@@ -202,7 +202,7 @@ plank_deploy_fnc_forceResetPlacement = {
 plank_deploy_fnc_decreaseFortCount = {
     FUN_ARGS_3(_unit,_fortIndex,_count);
 
-    DECLARE(_fortCounts) = _unit getVariable ["plank_deploy_fortCounts", []];
+    DECLARE(_fortCounts) = _unit getVariable ["plank_deploy_fortCounts", [1]];
     if (_fortIndex > DEFAULT_FORT_INDEX && {count _fortCounts > _fortIndex} && {_fortCounts select _fortIndex > 0}) then {
         _fortCounts set [_fortIndex, ((_fortCounts select _fortIndex) - _count) max 0];
         if ([_unit] call plank_deploy_fnc_isFortsCountEmpty) then {
@@ -216,7 +216,7 @@ plank_deploy_fnc_isFortsCountEmpty = {
 
     private ["_isFortsCountEmpty", "_fortCounts"];
     _isFortsCountEmpty = true;
-    _fortCounts = _unit getVariable ["plank_deploy_fortCounts", []];
+    _fortCounts = _unit getVariable ["plank_deploy_fortCounts", [1]];
     for "_i" from 1 to (count _fortCounts) - 1 do {
         if (_fortCounts select _i > 0) exitWith { _isFortsCountEmpty = false; };
     };
@@ -260,7 +260,7 @@ plank_deploy_fnc_addFortification = {
     FUN_ARGS_3(_unit,_fortIndex,_count);
 
     if (_fortIndex > 0 && {_fortIndex < count FORTS_DATA}) then {
-        DECLARE(_fortCounts) = _unit getVariable ["plank_deploy_fortCounts", []];
+        DECLARE(_fortCounts) = _unit getVariable ["plank_deploy_fortCounts", [1]];
         [_unit] call plank_deploy_fnc_forceResetPlacement;
         _fortCounts set [_fortIndex, (_fortCounts select _fortIndex) + _count];
         [_unit] call plank_deploy_fnc_addPlankAction;
@@ -270,7 +270,7 @@ plank_deploy_fnc_addFortification = {
 plank_deploy_fnc_removeFortification = {
     FUN_ARGS_3(_unit,_fortIndex,_count);
 
-    DECLARE(_fortCounts) = _unit getVariable ["plank_deploy_fortCounts", []];
+    DECLARE(_fortCounts) = _unit getVariable ["plank_deploy_fortCounts", [1]];
     if (_fortIndex > 0 && {_fortIndex < count FORTS_DATA} && {_fortCounts select _fortIndex > 0}) then {
         DECLARE(_newCount) = ((_fortCounts select _fortIndex) - _count) max 0;
         _fortCounts set [_fortIndex, _newCount];
