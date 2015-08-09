@@ -268,12 +268,12 @@ plank_ui_fnc_onMouseMoving = {
 
     call {
         if (plank_ui_isControlToggled) exitWith {
-            [-_deltaY / 15, MIN_HEIGHT, MAX_HEIGHT, "plank_deploy_fortRelativeHeight", SETTINGS_HEIGHT_SLIDER_IDC, SETTINGS_HEIGHT_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
-            [_deltaX / 25, MIN_HORIZONTAL_OFFSET, MAX_HORIZONTAL_OFFSET, "plank_deploy_fortHorizontalOffset", SETTINGS_HORIZONTAL_OFFSET_SLIDER_IDC, SETTINGS_HORIZONTAL_OFFSET_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
+            [-_deltaY / PLANK_HEIGHT_SENSITIVITY, MIN_HEIGHT, MAX_HEIGHT, "plank_deploy_fortRelativeHeight", SETTINGS_HEIGHT_SLIDER_IDC, SETTINGS_HEIGHT_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
+            [_deltaX / PLANK_HORIZONTAL_SENSITIVITY, MIN_HORIZONTAL_OFFSET, MAX_HORIZONTAL_OFFSET, "plank_deploy_fortHorizontalOffset", SETTINGS_HORIZONTAL_OFFSET_SLIDER_IDC, SETTINGS_HORIZONTAL_OFFSET_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
         };
         if (plank_ui_isShiftToggled) exitWith {
-            [-_deltaY, MIN_PITCH, MAX_PITCH, "plank_deploy_fortPitch", SETTINGS_PITCH_SLIDER_IDC, SETTINGS_PITCH_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
-            [-_deltaX, MIN_BANK, MAX_BANK, "plank_deploy_fortBank", SETTINGS_BANK_SLIDER_IDC, SETTINGS_BANK_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
+            [_deltaY / PLANK_PITCH_SENSITIVITY, MIN_PITCH, MAX_PITCH, "plank_deploy_fortPitch", SETTINGS_PITCH_SLIDER_IDC, SETTINGS_PITCH_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
+            [_deltaX / PLANK_BANK_SENSITIVITY, MIN_BANK, MAX_BANK, "plank_deploy_fortBank", SETTINGS_BANK_SLIDER_IDC, SETTINGS_BANK_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
         };
     };
 };
