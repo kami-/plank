@@ -15,7 +15,7 @@ plank_ui_fnc_createSettingsDialog = {
 };
 
 plank_ui_fnc_closeSettingsDialog = {
-    if (dialog) then {
+    if (!isNull findDisplay SETTINGS_DIALOG_IDD) then {
         closeDialog 0;
     };
 };
