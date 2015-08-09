@@ -237,10 +237,7 @@ plank_deploy_fnc_isFortsCountEmpty = {
 plank_deploy_fnc_initUnitVariables = {
     FUN_ARGS_2(_unit,_fortifications);
 
-    private "_fortActionIds";
-    _fortActionIds = [];
-    _fortActionIds set [(count _fortifications) - 1, nil];
-    _unit setVariable ["plank_deploy_fortActionIds", _fortActionIds, false];
+    _unit setVariable ["plank_deploy_plankActionId", nil, false];
     _unit setVariable ["plank_deploy_fortCounts", [_fortifications] call plank_deploy_fnc_shiftFortifications, false];
     [_unit] call plank_deploy_fnc_resetFort;
 };
@@ -344,7 +341,7 @@ plank_deploy_fnc_removeFortification = {
     };
 };
 
-plank_deploy_fnc_init = {
+plank_deploy_fnc_forceAddFortifications = {
     FUN_ARGS_2(_unit,_fortifications);
 
     [_unit] call plank_delpoy_fnc_forceRemoveAllFortifications;

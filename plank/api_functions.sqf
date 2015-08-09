@@ -20,7 +20,7 @@ plank_api_fnc_forceRemoveAllFortifications = {
 plank_api_fnc_forceAddFortifications = {
     FUN_ARGS_2(_unit,_fortifications);
 
-    [_unit, _fortifications] call plank_deploy_fnc_init;
+    [_unit, _fortifications] call plank_deploy_fnc_forceAddFortifications;
 };
 
 /**
