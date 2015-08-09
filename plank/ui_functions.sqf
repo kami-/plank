@@ -79,9 +79,11 @@ plank_ui_fnc_lockModeButtonClick = {
     call {
         if (_lockMode == LOCK_MODE_UNLOCKED) exitWith {
             _lockMode = LOCK_MODE_LOCKED;
+            [] call plank_ui_fnc_initFortControls;
         };
         if (_lockMode == LOCK_MODE_LOCKED) exitWith {
             _lockMode = LOCK_MODE_UNLOCKED;
+            [] call plank_ui_fnc_initFortControls;
         };
     };
     [_lockMode] call plank_ui_fnc_setLockModeButton;
@@ -142,8 +144,10 @@ plank_ui_fnc_updateBankSliderValue = {
 plank_ui_fnc_updateValue = {
     FUN_ARGS_3(_idc,_varName,_value);
 
-    ctrlSetText [_idc, str _value];
-    player setVariable [_varName, _value, false]
+    if (player getVariable ["plank_deploy_lockMode", LOCK_MODE_UNLOCKED] == LOCK_MODE_UNLOCKED) then {
+        ctrlSetText [_idc, str _value];
+        player setVariable [_varName, _value, false]
+    };
 };
 
 plank_ui_fnc_updateToggleValue = {
@@ -240,10 +244,12 @@ plank_ui_fnc_selectionChanged = {
 plank_ui_fnc_updateValueAndSlider = {
     FUN_ARGS_6(_value,_minValue,_maxValue,_varName,_sliderIdc,_valueIdc);
 
-    DECLARE(_newValue) = (player getVariable _varName) + _value;
-    _newValue = (_newValue max _minValue) min _maxValue;
-    [_valueIdc, _varName, _newValue] call plank_ui_fnc_updateValue;
-    sliderSetPosition [_sliderIdc, _newValue];
+    if (player getVariable ["plank_deploy_lockMode", LOCK_MODE_UNLOCKED] == LOCK_MODE_UNLOCKED) then {
+        DECLARE(_newValue) = (player getVariable _varName) + _value;
+        _newValue = (_newValue max _minValue) min _maxValue;
+        [_valueIdc, _varName, _newValue] call plank_ui_fnc_updateValue;
+        sliderSetPosition [_sliderIdc, _newValue];
+    };
 };
 
 plank_ui_fnc_onKeyDown = {
