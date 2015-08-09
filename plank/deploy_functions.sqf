@@ -8,6 +8,16 @@ plank_deploy_fnc_preInit = {
     PUSH_ALL(FORTS_DATA,plank_deploy_manualFortData);
 };
 
+plank_deploy_fnc_expandFortCounts = {
+    FUN_ARGS_1(_unit);
+
+    _fortCounts = _unit getVariable ["plank_deploy_fortCounts", [1]];
+    DECLARE(_shifted) = [1];
+    {
+        PUSH(_shifted,_x);
+    } foreach FORTS_DATA;
+};
+
 plank_deploy_fnc_getNonZeroFortIndexes = {
     FUN_ARGS_1(_unit);
 
@@ -246,6 +256,19 @@ plank_deploy_fnc_shiftFortifications = {
     _shifted;
 };
 
+plank_deploy_fnc_getDistanceFromBoundingBox = {
+    FUN_ARGS_1(_className);
+
+    private ["_object", "_boundingBox", "_maxWidth", "_maxLength"];
+    _object = _className createVehicleLocal [0, 0, 0];
+    _boundingBox = boundingBox _object;
+    _maxWidth = abs ((_boundingBox select 1 select 0) - (_boundingBox select 0 select 0));
+    _maxLength = abs ((_boundingBox select 1 select 1) - (_boundingBox select 0 select 1));
+    deleteVehicle _object;
+
+    _maxWidth max _maxLength;
+};
+
 plank_deploy_fnc_getFortifications = {
     DECLARE(_forts) = [];
     for "_i" from 1 to (count FORTS_DATA) - 1 do {
@@ -254,6 +277,45 @@ plank_deploy_fnc_getFortifications = {
     };
 
     _forts;
+};
+
+plank_deploy_fnc_addNewFortification = {
+    FUN_ARGS_2(_unit,_forData);
+
+    private ["_index", "_fortCounts"];
+    _index = count FORTS_DATA;
+    _fortCounts = _unit getVariable ["plank_deploy_fortCounts", [1]];
+    for "_i" from 1 to (count FORTS_DATA - count _fortCounts) do {
+        PUSH(_fortCounts,0);
+    };
+    _unit setVariable ["plank_deploy_fortCounts", _fortCounts, false];
+    PUSH(FORTS_DATA,_forData);
+    PUSH(_fortCounts,0);
+
+    _index;
+};
+
+plank_deploy_fnc_addNewDefaultFortificationWithDistance = {
+    FUN_ARGS_4(_unit,_className,_distance,_displayName);
+
+    DECLARE(_actualDisplayName) = _displayName;
+    if (isNil {_displayName}) then {
+        _actualDisplayName = _className;
+    };
+
+    [_unit, [_actualDisplayName, _className, _distance, 0, 360, {}]] call plank_deploy_fnc_addNewFortification;
+};
+
+plank_deploy_fnc_addNewDefaultFortification = {
+    FUN_ARGS_3(_unit,_className,_displayName);
+
+    [_unit, _className, 12, _displayName] call plank_deploy_fnc_addNewDefaultFortificationWithDistance;
+};
+
+plank_deploy_fnc_addNewBoundingFortification = {
+    FUN_ARGS_3(_unit,_className,_displayName);
+
+    [_unit, _className, [_className] call plank_deploy_fnc_getDistanceFromBoundingBox, _displayName] call plank_deploy_fnc_addNewDefaultFortificationWithDistance;
 };
 
 plank_deploy_fnc_addFortification = {

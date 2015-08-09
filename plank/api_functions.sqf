@@ -32,6 +32,47 @@ plank_api_fnc_getFortifications = {
 };
 
 /**
+ * Adds a new deployable fortification.
+ * Cancels any ongoing deployment.
+ * @param _unit The unit to add the fortifications to
+ * @param _fortData Array of fortification data consisting [_displayName, _className, _minDistance, _direction, _directionRange, _code]
+ * @return The index of the newly added fortification
+ */
+plank_api_fnc_addNewFortification = {
+    FUN_ARGS_2(_unit,_forData);
+
+    [_unit, _forData] call plank_deploy_fnc_addNewFortification;
+};
+
+/**
+ * Adds a new deployable fortification with default fort data.
+ * Cancels any ongoing deployment.
+ * @param _unit The unit to add the fortifications to
+ * @param _className Class name of the object to be deployes
+ * @param _displayName (optional) Display name of the fortification in the dialog
+ * @return The index of the newly added fortification
+ */
+plank_api_fnc_addNewDefaultFortification = {
+    FUN_ARGS_3(_unit,_className,_displayName);
+
+    [_unit, _className, _displayName] call plank_deploy_fnc_addNewDefaultFortification;
+};
+
+/**
+ * Adds a new deployable fortification with default fort data using the bounding box of the object.
+ * Cancels any ongoing deployment.
+ * @param _unit The unit to add the fortifications to
+ * @param _className Class name of the object to be deployes
+ * @param _displayName (optional) Display name of the fortification in the dialog
+ * @return The index of the newly added fortification
+ */
+plank_api_fnc_addNewBoundingFortification = {
+    FUN_ARGS_3(_unit,_className,_displayName);
+
+    [_unit, _className, _displayName] call plank_deploy_fnc_addNewBoundingFortification;
+};
+
+/**
  * Adds given number of fortifications by index.
  * Cancels any ongoing deployment.
  * @param _unit The unit to add the fortifications to
