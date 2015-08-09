@@ -306,6 +306,7 @@ plank_ui_fnc_initDialog = {
 };
 
 plank_ui_fnc_initFortControls = {
+    [] call plank_ui_fnc_initToggleValues;
     [] call plank_ui_fnc_initToggleButtons;
     [] call plank_ui_fnc_initSliders;
     [] call plank_ui_fnc_initSliderValues;
