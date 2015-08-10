@@ -1,7 +1,7 @@
 #ifndef PLANK_MACROS_H
 #define PLANK_MACROS_H
 
-#include "\userconfig\plank\settings.h"
+#include "\userconfig\plank\setting.h"
 #include "\userconfig\plank\log\global.h"
 
 #define PLANK_VERSION                           2.0.0
