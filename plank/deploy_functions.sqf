@@ -168,11 +168,14 @@ plank_deploy_fnc_cancelFortPlacement = {
 plank_deploy_fnc_confirmFortPlacement = {
     FUN_ARGS_1(_unit);
 
-    DECLARE(_fort) = _unit getVariable "plank_deploy_fort";
+    private ["_fort", "_fortIndex"];
+    _fort = _unit getVariable ["plank_deploy_fort", DEFAULT_FORT_INDEX];
+    _fortIndex = _unit getVariable "plank_deploy_fortIndex";
     _unit setVariable ["plank_deploy_placementState", STATE_PLACEMENT_DONE, false];
     [_unit, _fort] call plank_export_fnc_addFort;
-    [_unit, _fort] call GET_FORT_CODE(_unit getVariable "plank_deploy_fortIndex");
-    [_unit, _unit getVariable ["plank_deploy_fortIndex", DEFAULT_FORT_INDEX], 1] call plank_deploy_fnc_decreaseFortCount;
+    [_unit, _fort] call GET_FORT_CODE(_fortIndex);
+    _fort setVariable ["plank_deploy_placedByData", [_unit, _fortIndex], false];
+    [_unit, _fortIndex, 1] call plank_deploy_fnc_decreaseFortCount;
     [_unit] call plank_deploy_fnc_resetFort;
 };
 
@@ -190,6 +193,28 @@ plank_deploy_fnc_resetFort = {
     FUN_ARGS_1(_unit);
 
     [_unit, DEFAULT_FORT_INDEX, nil, DEFAULT_HORIZONTAL_OFFSET, DEFAULT_HEIGHT, DEFAULT_DIRECTION, DEFAULT_DISTANCE, DEFAULT_PITCH, DEFAULT_BANK, RELATIVE_TO_UNIT, LOCK_MODE_UNLOCKED] call plank_deploy_fnc_setFortVariables;
+};
+
+plank_deploy_fnc_pickupObject = {
+    FUN_ARGS_2(_unit,_object);
+
+    DECLARE(_placedByData) = _object getVariable ["plank_deploy_placedByData", [objNull, _fortIndex]];
+    if (_placedByData select 0 == _unit) then {
+        [_unit, _placedByData select 1, 1] call plank_deploy_fnc_addFortification;
+        deleteVehicle _object;
+    };
+};
+
+plank_deploy_fnc_canPickupObject = {
+    FUN_ARGS_2(_unit,_object);
+
+    DECLARE(_canPickup) = false;
+    if (!isNull _object) then {
+        DECLARE(_placedByData) = _object getVariable ["plank_deploy_placedByData", [objNull, _fortIndex]];
+        _canPickup = _placedByData select 0 == _unit;
+    };
+
+    _canPickup
 };
 
 plank_delpoy_fnc_forceRemoveAllFortifications = {

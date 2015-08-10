@@ -3,36 +3,63 @@
 // Magic to set default font for Arma 2 and Arma 3
 __EXEC(_plank_default_font = "puristaMedium"; _stop = false; while {isNil {call compile "blufor"} && {!_stop}} do {_plank_default_font = "Zeppelin32"; _stop = true;};)
 
-#define SETTINGS_BASE_H                         1.62
-#define SETTINGS_BASE_W                         0.8
+#define H_RATIO(NUM)                            (NUM * 3 / 4)
+#define TO_REAL_W(NUM)                          (NUM / safeZoneW)
+#define TO_REAL_H(NUM)                          (H_RATIO(NUM) / safeZoneH)
 
-#define SETTINGS_DIALOG_H                       SETTINGS_BASE_H
-#define SETTINGS_DIALOG_W                       SETTINGS_BASE_W * 3 / 4
+#define FONT_SIZE                               TO_REAL_W(0.1)
+#define DISABLED_COLOR                          {0, 0, 0, 0}
+#define DIALOG_BG_COLOR                         {0.161, 0.271, 0.275, 0.7}
+#define COMBO_SELECTED_BG_COLOR                 {0.6, 0.706, 0.729, 1}
+#define BUTTON_BG_COLOR                         {0.725, 0.435, 0.161, 1}
+#define BUTTON_TEXT_COLOR                       {1, 1, 1, 1}
 
-#define SETTINGS_BASE_X                         safeZoneX + safeZoneW - (SETTINGS_BASE_W + 0.1) * 3 / 4
-#define SETTINGS_BASE_Y                         safeZoneY + safeZoneH - (SETTINGS_BASE_H + 0.1)
+#define DIALOG_H                                (safeZoneH * 0.54)
+#define DIALOG_W                                (safeZoneW * 0.213)
+#define DIALOG_MARGIN_RIGHT                     TO_REAL_W(0.02)
+#define DIALOG_MARGIN_BOTTOM                    TO_REAL_H(0.02)
+#define DIALOG_PADDING_LEFT                     TO_REAL_H(0.03)
+#define DIALOG_PADDING_TOP                      TO_REAL_H(0.03)
+#define DIALOG_X                                safeZoneX + safeZoneW - DIALOG_W - DIALOG_MARGIN_RIGHT
+#define DIALOG_Y                                safeZoneY + safeZoneH - 1.5 * DIALOG_H - DIALOG_MARGIN_BOTTOM
 
-#define CONTROL_MARGIN_RIGHT                    0.02
-#define CONTROL_MARGIN_BOTTOM                   0.03
+#define ROW_BASE_H                              TO_REAL_H(0.1)
+#define CONTROL_MARGIN_RIGHT                    TO_REAL_W(0.02)
+#define CONTROL_MARGIN_BOTTOM                   TO_REAL_H(0.03)
+#define CONTROL_GROUP_H                         (2 * ROW_BASE_H) + CONTROL_MARGIN_BOTTOM + TO_REAL_H(0.08)
+#define CONTROL_GROUP_HALF_H                    ROW_BASE_H + CONTROL_MARGIN_BOTTOM + TO_REAL_H(0.02)
+#define CONTROL_X                               DIALOG_X + DIALOG_PADDING_LEFT
+#define CONTROL_HALF_Y(ROW)                     (DIALOG_Y + DIALOG_PADDING_TOP + (CONTROL_GROUP_HALF_H) * ROW)
+#define CONTROL_Y(ROW)                          (DIALOG_Y + DIALOG_PADDING_TOP + (CONTROL_GROUP_H) * ROW) - 3 * (ROW_BASE_H + CONTROL_MARGIN_BOTTOM)
 
-#define ROW_BASE_H                              0.035
-#define TITLE_BASE_W                            0.11
+#define EXPORT_BUTTON_W                         TO_REAL_W(0.209)
+#define EXPORT_BACKGROUND_W                     (EXPORT_BUTTON_W + DIALOG_PADDING_LEFT * 2)
+#define COMBO_W                                 DIALOG_W - DIALOG_PADDING_LEFT * 2
+#define CONFIRM_BUTTON_W                        TO_REAL_W(0.24)
+#define LOCK_BUTTON_W                           TO_REAL_W(0.21)
+#define PICKUP_BUTTON_W                         TO_REAL_W(0.21)
+#define TITLE_BASE_W                            TO_REAL_W(0.31)
 #define TITLE_BASE_H                            ROW_BASE_H
-#define VALUE_BASE_W                            0.11
+#define VALUE_BASE_W                            TO_REAL_W(0.3)
 #define VALUE_BASE_H                            ROW_BASE_H
-#define STATE_BASE_W                            0.05
-#define SLIDER_BASE_W                           0.4
+#define HEIGHT_MODE_BUTTON_W                    TO_REAL_W(0.5)
+#define STATE_BASE_W                            TO_REAL_W(0.05)
+#define SLIDER_BASE_W                           TO_REAL_W(0.9)
 #define SLIDER_BASE_H                           ROW_BASE_H
-#define RESET_BUTTON_BASE_W                     0.085
-#define RESET_BUTTON_BASE_H                     ROW_BASE_H
+#define RESET_BUTTON_W                          TO_REAL_W(0.17)
+#define RESET_BUTTON_H                          ROW_BASE_H
+#define EXPORT_BACKGROUND_H                     RESET_BUTTON_H + DIALOG_PADDING_LEFT
 
-#define CONTROL_GROUP_H                         (2 * ROW_BASE_H) + CONTROL_MARGIN_BOTTOM + 0.07
+#define EXPORT_BUTTON_X                         safeZoneX + safeZoneW - EXPORT_BUTTON_W - DIALOG_MARGIN_RIGHT - DIALOG_PADDING_LEFT
+#define EXPORT_BUTTON_Y                         DIALOG_Y - RESET_BUTTON_H
+#define EXPORT_BACKGROUND_X                     safeZoneX + safeZoneW - EXPORT_BACKGROUND_W - DIALOG_MARGIN_RIGHT
+#define EXPORT_BACKGROUND_Y                     DIALOG_Y - EXPORT_BACKGROUND_H - DIALOG_PADDING_LEFT * 2
+#define EXPORT_BUTTON_Y                         DIALOG_Y - RESET_BUTTON_H
+#define LOCK_BUTTON_X                           CONTROL_X + CONFIRM_BUTTON_W + TO_REAL_W(0.05)
+#define PICKUP_BUTTON_X                         LOCK_BUTTON_X + LOCK_BUTTON_W + TO_REAL_W(0.05)
+#define RESET_BUTTON_X                          CONTROL_X + TITLE_BASE_W + TO_REAL_W(0.05)
+#define HEIGHT_MODE_BUTTON_X                    RESET_BUTTON_X + RESET_BUTTON_W + TO_REAL_W(0.05)
 
-#define SETTINGS_PADDING_LEFT                   0.03
-#define SETTINGS_CONTROL_BASE_X                 SETTINGS_BASE_X + SETTINGS_PADDING_LEFT
-
-#define SETTINGS_PADDING_TOP                    0.03
-#define SETTINGS_CONTROL_BASE_Y(ROW)            (SETTINGS_BASE_Y + SETTINGS_PADDING_TOP + (CONTROL_GROUP_H) * ROW)
 
 class PlankSettingsDialog {
     idd = SETTINGS_DIALOG_IDD;
@@ -42,9 +69,12 @@ class PlankSettingsDialog {
     onUnload = "[] call plank_ui_fnc_dialogOnUnload;";
     controls[] = {
         DialogBackground,
+        ExportBackground,
+        ExportButton,
         FortCombo,
         ConfirmButton,
         LockModeButton,
+        PickupButton,
         CtrlTitle,
         CtrlValue,
         ShiftTitle,
@@ -91,7 +121,7 @@ class PlankSettingsDialog {
         style = 0;
         shadow = 2;
         font = __EVAL(_plank_default_font);
-        SizeEx = 0.03921;
+        sizeEx = FONT_SIZE;
     };
 
     class TitleBase : RscTextBase {
@@ -104,17 +134,17 @@ class PlankSettingsDialog {
         font = __EVAL(_plank_default_font);
         w = TITLE_BASE_W;
         h = TITLE_BASE_H;
-        text="Height";
+        text = "Height";
         colorBackground[] = {0, 0, 0, 0};
-        colorText[] = {0.85, 0.85, 0.85, 1};
+        colorText[] = BUTTON_TEXT_COLOR;
     };
 
     class ValueBase : RscTextBase {
         w = VALUE_BASE_W;
         h = VALUE_BASE_H;
-        text="";
+        text = "-10.00001";
         colorBackground[] = {0, 0, 0, 0};
-        colorText[] = {0.85, 0.85, 0.85, 1};
+        colorText[] = BUTTON_TEXT_COLOR;
     };
 
     class RscSliderBase {
@@ -137,26 +167,26 @@ class PlankSettingsDialog {
         access = 0;
         type = 1;
         text = "";
-        colorText[] = {0.305, 0.286, 0.301, 1};
-        colorDisabled[] = {0.4, 0.4, 0.4, 0};
-        colorBackground[] = {0.596, 0.576, 0.592, 1};
-        colorBackgroundDisabled[] = {0, 0, 0, 0};
-        colorBackgroundActive[] = {0.596, 0.576, 0.592, 1};
-        colorFocused[] = {0.596, 0.576, 0.592, 1};
-        colorShadow[] = {0, 0, 0, 1};
-        colorBorder[] = {0, 0, 0, 1};
-        soundEnter[] = {"",0.09,1};
-        soundPush[] = {"",0.09,1};
-        soundClick[] = {"\ca\ui\data\sound\new1",0.07,1};
-        soundEscape[] = {"",0.09,1};
-        style = 2;
+        style = 0x02 + 0x0c;
+        colorText[] = BUTTON_TEXT_COLOR;
+        colorDisabled[] = DISABLED_COLOR;
+        colorBackground[] = BUTTON_BG_COLOR;
+        colorBackgroundDisabled[] = DISABLED_COLOR;
+        colorBackgroundActive[] = BUTTON_BG_COLOR;
+        colorFocused[] = BUTTON_BG_COLOR;
+        colorShadow[] = {0, 0, 0, 0};
+        colorBorder[] = {0, 0, 0, 0};
+        soundEnter[] = {"", 0.09, 1};
+        soundPush[] = {"", 0.09, 1};
+        soundClick[] = {"\ca\ui\data\sound\new1", 0.07, 1};
+        soundEscape[] = {"", 0.09, 1};
         x = 0;
         y = 0;
         w = 0;
         h = 0;
         shadow = 0;
         font = __EVAL(_plank_default_font);
-        sizeEx = 0.03921;
+        sizeEx = FONT_SIZE;
         offsetX = 0.003;
         offsetY = 0.003;
         offsetPressedX = 0.001;
@@ -165,23 +195,30 @@ class PlankSettingsDialog {
     };
 
     class ResetButtonBase : RscButton {
-        w = RESET_BUTTON_BASE_W;
-        h = RESET_BUTTON_BASE_H;
-        SizeEx = 0.03921;
-        text="Reset";
+        w = RESET_BUTTON_W;
+        h = RESET_BUTTON_H;
+        x = RESET_BUTTON_X;
+        sizeEx = FONT_SIZE;
+        text = "Reset";
     };
 
     class RscCombo {
         idc = -1;
-        w = TITLE_BASE_W * 3;
+        w = COMBO_W;
         h = TITLE_BASE_H;
         access = 0;
         type = 4;
         style = 0;
-        colorSelect[] = {0.023529,0,0.0313725,1};
-        colorText[] = {0.023529,0,0.0313725,1};
-        colorBackground[] = {0.95,0.95,0.95,1};
-        colorScrollbar[] = {0.023529,0,0.0313725,1};
+        color[] = {0,0,0,0.6};
+        colorActive[] = {0,0,0,1};
+        colorDisabled[] = {0,0,0,0.3};
+        colorSelect[] = {0, 0, 0, 1};
+        colorSelect2[] = {0, 0, 0, 1};
+        colorSelectBackground[] = COMBO_SELECTED_BG_COLOR;
+        colorSelectBackground2[] = COMBO_SELECTED_BG_COLOR;
+        colorText[] = {0, 0, 0, 1};
+        colorBackground[] = {1, 1, 1, 1};
+        colorScrollbar[] = {0, 0, 0, 1};
         soundSelect[] = {"",0.1,1};
         soundExpand[] = {"",0.1,1};
         soundCollapse[] = {"",0.1,1};
@@ -197,72 +234,109 @@ class PlankSettingsDialog {
             border = "\ca\ui\data\ui_border_scroll_ca.paa";
         };
         shadow = 0;
-        colorSelectBackground[] = {0.8784,0.8471,0.651,1};
         arrowEmpty = "\ca\ui\data\ui_arrow_combo_ca.paa";
         arrowFull = "\ca\ui\data\ui_arrow_combo_active_ca.paa";
-        wholeHeight = 0.45;
-        color[] = {0,0,0,0.6};
-        colorActive[] = {0,0,0,1};
-        colorDisabled[] = {0,0,0,0.3};
+        wholeHeight = TO_REAL_H(1);
         font = __EVAL(_plank_default_font);
-        sizeEx = 0.03921;
+        sizeEx = FONT_SIZE;
+    };
+//--------------------------
+    class ExportBackground {
+        idc = SETTINGS_EXPORT_BACKGROUND_IDC;
+        type = 0;
+        style = 0;
+        colorText[] = {0, 0, 0, 0};
+        colorBackground[] = DIALOG_BG_COLOR;
+        colorDisabled[] = DISABLED_COLOR;
+        colorBackgroundDisabled[] = DISABLED_COLOR;
+        font = "EtelkaNarrowMediumPro";
+        sizeEx = 0.03;
+        text = "";
+        x = EXPORT_BACKGROUND_X;
+        y = EXPORT_BACKGROUND_Y;
+        h = EXPORT_BACKGROUND_H;
+        w = EXPORT_BACKGROUND_W;
+    };
+
+    class ExportButton : RscButton {
+        idc = SETTINGS_EXPORT_BUTTON_IDC;
+        x = EXPORT_BUTTON_X;
+        y = EXPORT_BUTTON_Y;
+        w = EXPORT_BUTTON_W;
+        h = RESET_BUTTON_H;
+        sizeEx = FONT_SIZE;
+        text = "Export";
+        action = "[] call plank_ui_fnc_exportButtonClick";
+        tooltip = "Exports player placed objects as SQF script to clipboard. Only works in SP."
     };
 //--------------------------
     class FortCombo : RscCombo {
         idc = SETTINGS_FORT_COMBO_IDC;
-        x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(FORT_LIST_ROW_INDEX);
+        x = CONTROL_X;
+        y = CONTROL_HALF_Y(FORT_LIST_ROW_INDEX);
         onLBSelChanged = "_this call plank_ui_fnc_selectionChanged;";
     };
 //--------------------------
     class ConfirmButton : RscButton {
         idc = SETTINGS_CONFIRM_BUTTON_IDC;
-        x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(FORT_CONFIRM_LOCK_ROW_INDEX);
-        w = RESET_BUTTON_BASE_W;
-        h = RESET_BUTTON_BASE_H;
-        SizeEx = 0.03921;
+        x = CONTROL_X;
+        y = CONTROL_HALF_Y(FORT_CONFIRM_LOCK_ROW_INDEX);
+        w = CONFIRM_BUTTON_W;
+        h = RESET_BUTTON_H;
+        sizeEx = FONT_SIZE;
         text = "Confirm";
         action = "[] call plank_ui_fnc_confirmButtonClick";
     };
 
     class LockModeButton : RscButton {
         idc = SETTINGS_LOCK_MODE_BUTTON_IDC;
-        x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(FORT_CONFIRM_LOCK_ROW_INDEX);
-        w = RESET_BUTTON_BASE_W;
-        h = RESET_BUTTON_BASE_H;
-        SizeEx = 0.03921;
-        text = "Lock";
+        x = LOCK_BUTTON_X;
+        y = CONTROL_HALF_Y(FORT_CONFIRM_LOCK_ROW_INDEX);
+        w = LOCK_BUTTON_W;
+        h = RESET_BUTTON_H;
+        sizeEx = FONT_SIZE;
+        text = "Unlock";
         action = "[] call plank_ui_fnc_lockModeButtonClick";
+    };
+
+    class PickupButton : RscButton {
+        idc = SETTINGS_PICKUP_BUTTON_IDC;
+        x = PICKUP_BUTTON_X;
+        y = CONTROL_HALF_Y(FORT_CONFIRM_LOCK_ROW_INDEX);
+        w = LOCK_BUTTON_W;
+        h = RESET_BUTTON_H;
+        sizeEx = FONT_SIZE;
+        text = "Pickup";
+        action = "[] call plank_ui_fnc_pickupButtonClick";
+        tooltip = "Pickup your previously placed object."
     };
 //--------------------------
     class CtrlTitle : TitleBase {
         idc = SETTINGS_CTRL_TITLE_IDC;
-        x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(TOGGLE_ROW_INDEX);
+        x = CONTROL_X;
+        y = CONTROL_HALF_Y(TOGGLE_ROW_INDEX);
         text = "Ctrl";
     };
 
     class CtrlValue : ValueBase {
         idc = SETTINGS_CTRL_VALUE_IDC;
-        x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(TOGGLE_ROW_INDEX);
+        x = CONTROL_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
+        y = CONTROL_HALF_Y(TOGGLE_ROW_INDEX);
         text = "Off";
         colorText[] = {1, 0, 0, 1};
     };
 
     class ShiftTitle : TitleBase {
         idc = SETTINGS_SHIFT_TITLE_IDC;
-        x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT + STATE_BASE_W + CONTROL_MARGIN_RIGHT * 3;
-        y = SETTINGS_CONTROL_BASE_Y(TOGGLE_ROW_INDEX);
+        x = CONTROL_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT + STATE_BASE_W + CONTROL_MARGIN_RIGHT * 3;
+        y = CONTROL_HALF_Y(TOGGLE_ROW_INDEX);
         text = "Shift";
     };
 
     class ShiftValue : ValueBase {
         idc = SETTINGS_SHIFT_VALUE_IDC;
-        x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT + STATE_BASE_W + CONTROL_MARGIN_RIGHT * 3 + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(TOGGLE_ROW_INDEX);
+        x = CONTROL_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT + STATE_BASE_W + CONTROL_MARGIN_RIGHT * 3 + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
+        y = CONTROL_HALF_Y(TOGGLE_ROW_INDEX);
         w = STATE_BASE_W;
         text = "Off";
         colorText[] = {1, 0, 0, 1};
@@ -270,174 +344,165 @@ class PlankSettingsDialog {
 //--------------------------
     class HeightTitle : TitleBase {
         idc = SETTINGS_HEIGHT_TITLE_IDC;
-        x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(HEIGHT_ROW_INDEX);
+        x = CONTROL_X;
+        y = CONTROL_Y(HEIGHT_ROW_INDEX);
     };
 
     class HeightModeButton : ResetButtonBase {
         idc = SETTINGS_HEIGHT_MODE_BUTTON_IDC;
-        x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + RESET_BUTTON_BASE_W + CONTROL_MARGIN_RIGHT * 2;
-        y = SETTINGS_CONTROL_BASE_Y(HEIGHT_ROW_INDEX);
-        w = 0.2;
+        x = HEIGHT_MODE_BUTTON_X;
+        y = CONTROL_Y(HEIGHT_ROW_INDEX);
+        w = HEIGHT_MODE_BUTTON_W;
         text = "Snap to Terrain";
         action = "[] call plank_ui_fnc_heightModeButtonClick";
-        colorBackground[] = {1, 1, 1, 1};
-        colorBackgroundActive[] = {1, 1, 1, 1};
-        colorFocused[] = {1, 1, 1, 1};
     };
 
     class HeightSlider : SliderBase {
         idc = SETTINGS_HEIGHT_SLIDER_IDC;
-        x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(HEIGHT_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        x = CONTROL_X;
+        y = CONTROL_Y(HEIGHT_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
         onSliderPosChanged = "[_this select 1] call plank_ui_fnc_updateHeightSliderValue";
     };
     
     class HeightValue : ValueBase {
         idc = SETTINGS_HEIGHT_VALUE_IDC;
-        x = SETTINGS_CONTROL_BASE_X + SLIDER_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(HEIGHT_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        x = CONTROL_X + SLIDER_BASE_W + CONTROL_MARGIN_RIGHT;
+        y = CONTROL_Y(HEIGHT_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
     };
 
     class HeightResetButton : ResetButtonBase {
         idc = SETTINGS_HEIGHT_RESET_BUTTON_IDC;
-        x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(HEIGHT_ROW_INDEX);
+        y = CONTROL_Y(HEIGHT_ROW_INDEX);
         action = "[] call plank_ui_fnc_resetHeightSlider";
     };
 //--------------------------
     class HorizontalOffsetTitle : TitleBase {
         idc = SETTINGS_HORIZONTAL_OFFSET_TITLE_IDC;
-        x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(HORIZONTAL_OFFSET_ROW_INDEX);
+        x = CONTROL_X;
+        y = CONTROL_Y(HORIZONTAL_OFFSET_ROW_INDEX);
         text="Horizontal";
     };
 
     class HorizontalOffsetSlider : SliderBase {
         idc = SETTINGS_HORIZONTAL_OFFSET_SLIDER_IDC;
-        x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(HORIZONTAL_OFFSET_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        x = CONTROL_X;
+        y = CONTROL_Y(HORIZONTAL_OFFSET_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
         onSliderPosChanged = "[_this select 1] call plank_ui_fnc_updateHorizontalOffsetSliderValue";
     };
 
     class HorizontalOffsetValue : ValueBase {
         idc = SETTINGS_HORIZONTAL_OFFSET_VALUE_IDC;
-        x = SETTINGS_CONTROL_BASE_X + SLIDER_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(HORIZONTAL_OFFSET_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        x = CONTROL_X + SLIDER_BASE_W + CONTROL_MARGIN_RIGHT;
+        y = CONTROL_Y(HORIZONTAL_OFFSET_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
     };
 
     class HorizontalOffsetResetButton : ResetButtonBase {
         idc = SETTINGS_HORIZONTAL_OFFSET_RESET_BUTTON_IDC;
-        x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(HORIZONTAL_OFFSET_ROW_INDEX);
+        y = CONTROL_Y(HORIZONTAL_OFFSET_ROW_INDEX);
         action = "[] call plank_ui_fnc_resetHorizontalOffsetSlider";
     };
 //--------------------------
     class DirectionTitle : TitleBase {
         idc = SETTINGS_DIRECTION_TITLE_IDC;
-        x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(DIRECTION_ROW_INDEX);
+        x = CONTROL_X;
+        y = CONTROL_Y(DIRECTION_ROW_INDEX);
         text="Direction";
     };
 
     class DirectionSlider : SliderBase {
         idc = SETTINGS_DIRECTION_SLIDER_IDC;
-        x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(DIRECTION_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        x = CONTROL_X;
+        y = CONTROL_Y(DIRECTION_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
         onSliderPosChanged = "[_this select 1] call plank_ui_fnc_updateDirectiontSliderValue";
     };
 
     class DirectionValue : ValueBase {
         idc = SETTINGS_DIRECTION_VALUE_IDC;
-        x = SETTINGS_CONTROL_BASE_X + SLIDER_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(DIRECTION_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        x = CONTROL_X + SLIDER_BASE_W + CONTROL_MARGIN_RIGHT;
+        y = CONTROL_Y(DIRECTION_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
     };
 
     class DirectionResetButton : ResetButtonBase {
         idc = SETTINGS_DIRECTION_RESET_BUTTON_IDC;
-        x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(DIRECTION_ROW_INDEX);
+        y = CONTROL_Y(DIRECTION_ROW_INDEX);
         action = "[] call plank_ui_fnc_resetDirectionSlider";
     };
 //--------------------------
     class DistanceTitle : TitleBase {
         idc = SETTINGS_DISTANCE_TITLE_IDC;
-        x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(DISTANCE_ROW_INDEX);
+        x = CONTROL_X;
+        y = CONTROL_Y(DISTANCE_ROW_INDEX);
         text="Distance";
     };
 
     class DistanceSlider : SliderBase {
         idc = SETTINGS_DISTANCE_SLIDER_IDC;
-        x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(DISTANCE_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        x = CONTROL_X;
+        y = CONTROL_Y(DISTANCE_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
         onSliderPosChanged = "[_this select 1] call plank_ui_fnc_updateDistanceSliderValue";
     };
 
     class DistanceValue : ValueBase {
         idc = SETTINGS_DISTANCE_VALUE_IDC;
-        x = SETTINGS_CONTROL_BASE_X + SLIDER_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(DISTANCE_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        x = CONTROL_X + SLIDER_BASE_W + CONTROL_MARGIN_RIGHT;
+        y = CONTROL_Y(DISTANCE_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
     };
 
     class DistanceResetButton : ResetButtonBase {
         idc = SETTINGS_DISTANCE_RESET_BUTTON_IDC;
-        x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(DISTANCE_ROW_INDEX);
+        y = CONTROL_Y(DISTANCE_ROW_INDEX);
         action = "[] call plank_ui_fnc_resetDistanceSlider";
     };
 //--------------------------
     class PitchTitle : TitleBase {
         idc = SETTINGS_PITCH_TITLE_IDC;
-        x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(PITCH_ROW_INDEX);
+        x = CONTROL_X;
+        y = CONTROL_Y(PITCH_ROW_INDEX);
         text="Pitch";
     };
 
     class PitchSlider : SliderBase {
         idc = SETTINGS_PITCH_SLIDER_IDC;
-        x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(PITCH_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        x = CONTROL_X;
+        y = CONTROL_Y(PITCH_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
         onSliderPosChanged = "[_this select 1] call plank_ui_fnc_updatePitchSliderValue";
     };
 
     class PitchValue : ValueBase {
         idc = SETTINGS_PITCH_VALUE_IDC;
-        x = SETTINGS_CONTROL_BASE_X + SLIDER_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(PITCH_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        x = CONTROL_X + SLIDER_BASE_W + CONTROL_MARGIN_RIGHT;
+        y = CONTROL_Y(PITCH_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
     };
 
     class PitchResetButton : ResetButtonBase {
         idc = SETTINGS_PITCH_RESET_BUTTON_IDC;
-        x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(PITCH_ROW_INDEX);
+        y = CONTROL_Y(PITCH_ROW_INDEX);
         action = "[] call plank_ui_fnc_resetPitchSlider";
     };
 //--------------------------
     class BankTitle : TitleBase {
         idc = SETTINGS_BANK_TITLE_IDC;
-        x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(BANK_ROW_INDEX);
+        x = CONTROL_X;
+        y = CONTROL_Y(BANK_ROW_INDEX);
         text="Bank";
     };
 
     class BankSlider : SliderBase {
         idc = SETTINGS_BANK_SLIDER_IDC;
-        x = SETTINGS_CONTROL_BASE_X;
-        y = SETTINGS_CONTROL_BASE_Y(BANK_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        x = CONTROL_X;
+        y = CONTROL_Y(BANK_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
         onSliderPosChanged = "[_this select 1] call plank_ui_fnc_updateBankSliderValue";
     };
 
     class BankValue : ValueBase {
         idc = SETTINGS_BANK_VALUE_IDC;
-        x = SETTINGS_CONTROL_BASE_X + SLIDER_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(BANK_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
+        x = CONTROL_X + SLIDER_BASE_W + CONTROL_MARGIN_RIGHT;
+        y = CONTROL_Y(BANK_ROW_INDEX) + ROW_BASE_H + CONTROL_MARGIN_BOTTOM;
     };
 
     class BankResetButton : ResetButtonBase {
         idc = SETTINGS_BANK_RESET_BUTTON_IDC;
-        x = SETTINGS_CONTROL_BASE_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
-        y = SETTINGS_CONTROL_BASE_Y(BANK_ROW_INDEX);
+        y = CONTROL_Y(BANK_ROW_INDEX);
         action = "[] call plank_ui_fnc_resetBankSlider";
     };
 //--------------------------
@@ -445,14 +510,14 @@ class PlankSettingsDialog {
         idc = SETTINGS_BACKGROUND_IDC;
         type = 0;
         style = 0;
-        colorBackground[] = {0, 0, 0, 0.3};
+        colorBackground[] = DIALOG_BG_COLOR;
         colorText[] = {0, 0, 0, 0};
         font = "EtelkaNarrowMediumPro";
         sizeEx = 0.03;
         text = "";
-        x = SETTINGS_BASE_X;
-        y = SETTINGS_BASE_Y;
-        h = SETTINGS_DIALOG_H;
-        w = SETTINGS_DIALOG_W;
+        x = DIALOG_X;
+        y = DIALOG_Y;
+        h = DIALOG_H;
+        w = DIALOG_W;
     };
 };

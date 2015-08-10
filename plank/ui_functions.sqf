@@ -54,6 +54,14 @@ plank_ui_fnc_resetBankSlider = {
     [0] call plank_ui_fnc_updateBankSliderValue;
 };
 
+plank_ui_fnc_exportButtonClick = {
+    [] call plank_api_fnc_export;
+};
+
+plank_ui_fnc_pickupButtonClick = {
+    [player, cursorTarget] call plank_deploy_fnc_pickupObject;
+};
+
 plank_ui_fnc_heightModeButtonClick = {
     DECLARE(_heightMode) = player getVariable ["plank_deploy_heightMode", RELATIVE_TO_UNIT];
     call {
@@ -306,9 +314,20 @@ plank_ui_fnc_initDialog = {
     plank_ui_onKeyDownEhId = findDisplay 46 displayAddEventHandler ["KeyDown", "_this call plank_ui_fnc_onKeyDown;"];
     plank_ui_onMouseMovingEhId = findDisplay 46 displayAddEventHandler ["MouseMoving", "_this call plank_ui_fnc_onMouseMoving;"];
     plank_ui_onMouseZChangedEhId = findDisplay 46 displayAddEventHandler ["MouseZChanged", "_this call plank_ui_fnc_onMouseZChanged;"];
+    [] call plank_ui_fnc_initExportPickupButtons;
     [] call plank_ui_fnc_initFortControls;
     [] call plank_ui_fnc_initFortCombo;
     [player getVariable ["plank_deploy_heightMode", RELATIVE_TO_UNIT]] call plank_ui_fnc_setHeightModeButton;
+};
+
+plank_ui_fnc_initExportPickupButtons = {
+    if (isMultiplayer) then {
+        (findDisplay SETTINGS_DIALOG_IDD displayCtrl SETTINGS_EXPORT_BACKGROUND_IDC) ctrlSetBackgroundColor [0, 0, 0, 0];
+        ctrlEnable [SETTINGS_EXPORT_BUTTON_IDC, false];
+    };
+    if !([player, cursorTarget] call plank_deploy_fnc_canPickupObject) then {
+        ctrlEnable [SETTINGS_PICKUP_BUTTON_IDC, false];
+    };
 };
 
 plank_ui_fnc_initFortControls = {
