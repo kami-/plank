@@ -9,7 +9,7 @@ plank_isInitialized = false;
 [] call compile preProcessFileLineNumbers ADDON_PATH(config_functions.sqf);
 plank_isEnabled = ["isEnabled"] call plank_config_fnc_getBool;
 
-if (plank_isEnabled) then {
+if (plank_isEnabled && {!isDedicated}) then {
     [] call compile preProcessFileLineNumbers ADDON_PATH(event_functions.sqf);
     [] call plank_event_fnc_init;
     [] call compile preProcessFileLineNumbers ADDON_PATH(deploy_functions.sqf);
