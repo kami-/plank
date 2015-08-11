@@ -29,6 +29,7 @@ __EXEC(_plank_default_font = "puristaMedium"; _stop = false; while {isNil {call 
 #define CONTROL_GROUP_H                         (2 * ROW_BASE_H) + CONTROL_MARGIN_BOTTOM + TO_REAL_H(0.08)
 #define CONTROL_GROUP_HALF_H                    ROW_BASE_H + CONTROL_MARGIN_BOTTOM + TO_REAL_H(0.02)
 #define CONTROL_X                               DIALOG_X + DIALOG_PADDING_LEFT
+#define CONTROL_RIGHT_X                         safeZoneX + safeZoneW - DIALOG_MARGIN_RIGHT - DIALOG_PADDING_LEFT
 #define CONTROL_HALF_Y(ROW)                     (DIALOG_Y + DIALOG_PADDING_TOP + (CONTROL_GROUP_HALF_H) * ROW)
 #define CONTROL_Y(ROW)                          (DIALOG_Y + DIALOG_PADDING_TOP + (CONTROL_GROUP_H) * ROW) - 3 * (ROW_BASE_H + CONTROL_MARGIN_BOTTOM)
 
@@ -38,27 +39,32 @@ __EXEC(_plank_default_font = "puristaMedium"; _stop = false; while {isNil {call 
 #define CONFIRM_BUTTON_W                        TO_REAL_W(0.24)
 #define LOCK_BUTTON_W                           TO_REAL_W(0.21)
 #define PICKUP_BUTTON_W                         TO_REAL_W(0.21)
+#define MOVE_TITLE_W                            TO_REAL_W(0.16)
+#define TOGGLE_VALUE_W                          TO_REAL_W(0.12)
+#define ROTATE_TITLE_W                          TO_REAL_W(0.2)
 #define TITLE_BASE_W                            TO_REAL_W(0.31)
 #define TITLE_BASE_H                            ROW_BASE_H
 #define VALUE_BASE_W                            TO_REAL_W(0.3)
 #define VALUE_BASE_H                            ROW_BASE_H
-#define HEIGHT_MODE_BUTTON_W                    TO_REAL_W(0.5)
-#define STATE_BASE_W                            TO_REAL_W(0.05)
+#define HEIGHT_MODE_BUTTON_W                    TO_REAL_W(0.55)
 #define SLIDER_BASE_W                           TO_REAL_W(0.9)
 #define SLIDER_BASE_H                           ROW_BASE_H
 #define RESET_BUTTON_W                          TO_REAL_W(0.17)
 #define RESET_BUTTON_H                          ROW_BASE_H
 #define EXPORT_BACKGROUND_H                     RESET_BUTTON_H + DIALOG_PADDING_LEFT
 
-#define EXPORT_BUTTON_X                         safeZoneX + safeZoneW - EXPORT_BUTTON_W - DIALOG_MARGIN_RIGHT - DIALOG_PADDING_LEFT
+#define RESET_BUTTON_X                          CONTROL_X + TITLE_BASE_W + TO_REAL_W(0.05)
+#define HEIGHT_MODE_BUTTON_X                    CONTROL_RIGHT_X - HEIGHT_MODE_BUTTON_W
+#define EXPORT_BUTTON_X                         CONTROL_RIGHT_X - EXPORT_BUTTON_W
 #define EXPORT_BUTTON_Y                         DIALOG_Y - RESET_BUTTON_H
 #define EXPORT_BACKGROUND_X                     safeZoneX + safeZoneW - EXPORT_BACKGROUND_W - DIALOG_MARGIN_RIGHT
 #define EXPORT_BACKGROUND_Y                     DIALOG_Y - EXPORT_BACKGROUND_H - DIALOG_PADDING_LEFT * 2
 #define EXPORT_BUTTON_Y                         DIALOG_Y - RESET_BUTTON_H
-#define LOCK_BUTTON_X                           CONTROL_X + CONFIRM_BUTTON_W + TO_REAL_W(0.05)
-#define PICKUP_BUTTON_X                         LOCK_BUTTON_X + LOCK_BUTTON_W + TO_REAL_W(0.05)
-#define RESET_BUTTON_X                          CONTROL_X + TITLE_BASE_W + TO_REAL_W(0.05)
-#define HEIGHT_MODE_BUTTON_X                    RESET_BUTTON_X + RESET_BUTTON_W + TO_REAL_W(0.05)
+#define LOCK_BUTTON_X                           RESET_BUTTON_X
+#define PICKUP_BUTTON_X                         CONTROL_RIGHT_X - PICKUP_BUTTON_W
+#define MOVE_VALUE_X                            CONTROL_X + MOVE_TITLE_W + TO_REAL_W(0.05)
+#define ROTATE_TITLE_X                          HEIGHT_MODE_BUTTON_X
+#define ROTATE_VALUE_X                          ROTATE_TITLE_X + ROTATE_TITLE_W + TO_REAL_W(0.05)
 
 
 class PlankSettingsDialog {
@@ -75,10 +81,10 @@ class PlankSettingsDialog {
         ConfirmButton,
         LockModeButton,
         PickupButton,
-        CtrlTitle,
-        CtrlValue,
-        ShiftTitle,
-        ShiftValue,
+        MoveTitle,
+        MoveValue,
+        RotateTitle,
+        RotateValue,
         HeightTitle,
         HeightModeButton,
         HeightSlider,
@@ -267,7 +273,7 @@ class PlankSettingsDialog {
         sizeEx = FONT_SIZE;
         text = "Export";
         action = "[] call plank_ui_fnc_exportButtonClick";
-        tooltip = "Exports player placed objects as SQF script to clipboard. Only works in SP."
+        tooltip = "Exports player placed objects as SQF script to clipboard. Only works in SP.";
     };
 //--------------------------
     class FortCombo : RscCombo {
@@ -308,36 +314,39 @@ class PlankSettingsDialog {
         sizeEx = FONT_SIZE;
         text = "Pickup";
         action = "[] call plank_ui_fnc_pickupButtonClick";
-        tooltip = "Pickup your previously placed object."
+        tooltip = "Pickup your previously placed object.";
     };
 //--------------------------
-    class CtrlTitle : TitleBase {
-        idc = SETTINGS_CTRL_TITLE_IDC;
+    class MoveTitle : TitleBase {
+        idc = SETTINGS_MOVE_TITLE_IDC;
         x = CONTROL_X;
         y = CONTROL_HALF_Y(TOGGLE_ROW_INDEX);
-        text = "Ctrl";
+        w = MOVE_TITLE_W;
+        text = "Move";
     };
 
-    class CtrlValue : ValueBase {
-        idc = SETTINGS_CTRL_VALUE_IDC;
-        x = CONTROL_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
+    class MoveValue : ValueBase {
+        idc = SETTINGS_MOVE_VALUE_IDC;
+        x = MOVE_VALUE_X;
         y = CONTROL_HALF_Y(TOGGLE_ROW_INDEX);
+        w = TOGGLE_VALUE_W;
         text = "Off";
         colorText[] = {1, 0, 0, 1};
     };
 
-    class ShiftTitle : TitleBase {
-        idc = SETTINGS_SHIFT_TITLE_IDC;
-        x = CONTROL_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT + STATE_BASE_W + CONTROL_MARGIN_RIGHT * 3;
+    class RotateTitle : TitleBase {
+        idc = SETTINGS_ROTATE_TITLE_IDC;
+        x = ROTATE_TITLE_X;
         y = CONTROL_HALF_Y(TOGGLE_ROW_INDEX);
-        text = "Shift";
+        w = ROTATE_TITLE_W;
+        text = "Rotate";
     };
 
-    class ShiftValue : ValueBase {
-        idc = SETTINGS_SHIFT_VALUE_IDC;
-        x = CONTROL_X + TITLE_BASE_W + CONTROL_MARGIN_RIGHT + STATE_BASE_W + CONTROL_MARGIN_RIGHT * 3 + TITLE_BASE_W + CONTROL_MARGIN_RIGHT;
+    class RotateValue : ValueBase {
+        idc = SETTINGS_ROTATE_VALUE_IDC;
+        x = ROTATE_VALUE_X;
         y = CONTROL_HALF_Y(TOGGLE_ROW_INDEX);
-        w = STATE_BASE_W;
+        w = TOGGLE_VALUE_W;
         text = "Off";
         colorText[] = {1, 0, 0, 1};
     };

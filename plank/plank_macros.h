@@ -66,10 +66,10 @@
 #define SETTINGS_CONFIRM_BUTTON_IDC                     143812
 #define SETTINGS_LOCK_MODE_BUTTON_IDC                   143813
 #define SETTINGS_PICKUP_BUTTON_IDC                      143814
-#define SETTINGS_CTRL_TITLE_IDC                         143825
-#define SETTINGS_CTRL_VALUE_IDC                         143826
-#define SETTINGS_SHIFT_TITLE_IDC                        143827
-#define SETTINGS_SHIFT_VALUE_IDC                        143828
+#define SETTINGS_MOVE_TITLE_IDC                         143825
+#define SETTINGS_MOVE_VALUE_IDC                         143826
+#define SETTINGS_ROTATE_TITLE_IDC                       143827
+#define SETTINGS_ROTATE_VALUE_IDC                       143828
 #define SETTINGS_HEIGHT_TITLE_IDC                       143830
 #define SETTINGS_HEIGHT_SLIDER_IDC                      143831
 #define SETTINGS_HEIGHT_RESET_BUTTON_IDC                143832
