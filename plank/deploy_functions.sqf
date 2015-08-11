@@ -345,7 +345,7 @@ plank_deploy_fnc_addFortification = {
 
     if (_fortIndex > 0 && {_fortIndex < count FORTS_DATA}) then {
         DECLARE(_fortCounts) = _unit getVariable ["plank_deploy_fortCounts", [1]];
-        [_unit] call plank_deploy_fnc_forceResetPlacement;
+        [] call plank_ui_fnc_initFortCombo;
         _fortCounts set [_fortIndex, (_fortCounts select _fortIndex) + _count];
         [_unit] call plank_deploy_fnc_addPlankAction;
     };

@@ -14,8 +14,12 @@ plank_ui_fnc_createSettingsDialog = {
     };
 };
 
+plank_ui_fnc_isDialogOpen = {
+    !isNull findDisplay SETTINGS_DIALOG_IDD;
+};
+
 plank_ui_fnc_closeSettingsDialog = {
-    if (!isNull findDisplay SETTINGS_DIALOG_IDD) then {
+    if ([] call plank_ui_fnc_isDialogOpen) then {
         closeDialog 0;
     };
 };
@@ -109,7 +113,7 @@ plank_ui_fnc_confirmButtonClick = {
     if (_fortIndex != DEFAULT_FORT_INDEX) then {
         [player] call plank_deploy_fnc_confirmFortPlacement;
         [] call plank_ui_fnc_initFortControls;
-        [] call plank_ui_fnc_initFortCombo;
+        [] call plank_ui_fnc_resetFortCombo;
     };
 };
 
@@ -212,9 +216,27 @@ plank_ui_fnc_initSliderTextValues = {
 };
 
 plank_ui_fnc_initFortCombo = {
-    lbClear SETTINGS_FORT_COMBO_IDC;
-    [] call plank_ui_fnc_addFortificationLabels;
-    lbSetCurSel [SETTINGS_FORT_COMBO_IDC, player getVariable ["plank_deploy_fortIndex", DEFAULT_FORT_INDEX]];
+    if ([] call plank_ui_fnc_isDialogOpen) then {
+        lbClear SETTINGS_FORT_COMBO_IDC;
+        [] call plank_ui_fnc_addFortificationLabels;
+    };
+};
+
+plank_ui_fnc_getComboIndexByFortIndex = {
+    FUN_ARGS_1(_fortIndex);
+
+    DECLARE(_index) = 0;
+    for "_i" from 0 to (lbSize SETTINGS_FORT_COMBO_IDC) - 1 do {
+        if (lbValue [SETTINGS_FORT_COMBO_IDC, _i] == _fortIndex) exitWith { _index = _i; };
+    };
+
+    _index;
+};
+
+plank_ui_fnc_resetFortCombo = {
+    [] call plank_ui_fnc_initFortCombo;
+    DECLARE(_index) = [player getVariable ["plank_deploy_fortIndex", DEFAULT_FORT_INDEX]] call plank_ui_fnc_getComboIndexByFortIndex;
+    lbSetCurSel [SETTINGS_FORT_COMBO_IDC, _index];
 };
 
 plank_ui_fnc_addFortificationLabel = {
@@ -227,7 +249,6 @@ plank_ui_fnc_addFortificationLabel = {
     };
     _index = lbAdd [SETTINGS_FORT_COMBO_IDC, _label];
     lbSetValue [SETTINGS_FORT_COMBO_IDC, _index, _fortIndex];
-    lbSetData [SETTINGS_FORT_COMBO_IDC, _index, "aaaaaaaaaaaaa"];
 };
 
 plank_ui_fnc_addFortificationLabels = {
@@ -316,7 +337,7 @@ plank_ui_fnc_initDialog = {
     plank_ui_onMouseZChangedEhId = findDisplay 46 displayAddEventHandler ["MouseZChanged", "_this call plank_ui_fnc_onMouseZChanged;"];
     [] call plank_ui_fnc_initExportPickupButtons;
     [] call plank_ui_fnc_initFortControls;
-    [] call plank_ui_fnc_initFortCombo;
+    [] call plank_ui_fnc_resetFortCombo;
     [player getVariable ["plank_deploy_heightMode", RELATIVE_TO_UNIT]] call plank_ui_fnc_setHeightModeButton;
 };
 
