@@ -222,7 +222,7 @@ plank_delpoy_fnc_forceRemoveAllFortifications = {
 
     [_unit] call plank_deploy_fnc_forceResetPlacement;
     [_unit] call plank_deploy_fnc_removePlankAction;
-    _unit setVariable ["plank_deploy_fortCounts", nil, false];
+    _unit setVariable ["plank_deploy_fortCounts", [1], false];
 };
 
 plank_deploy_fnc_forceResetPlacement = {
@@ -278,6 +278,16 @@ plank_deploy_fnc_shiftFortifications = {
     _shifted;
 };
 
+plank_deploy_fnc_initFortCounts = {
+    FUN_ARGS_1(_unit);
+
+    DECLARE(_fortCounts) = _unit getVariable ["plank_deploy_fortCounts", [1]];
+    for "_i" from 1 to (count FORTS_DATA - count _fortCounts) do {
+        PUSH(_fortCounts,0);
+    };
+    _unit setVariable ["plank_deploy_fortCounts", _fortCounts, false];
+};
+
 plank_deploy_fnc_getDistanceFromBoundingBox = {
     FUN_ARGS_1(_className);
 
@@ -306,11 +316,7 @@ plank_deploy_fnc_addNewFortification = {
 
     private ["_index", "_fortCounts"];
     _index = count FORTS_DATA;
-    _fortCounts = _unit getVariable ["plank_deploy_fortCounts", [1]];
-    for "_i" from 1 to (count FORTS_DATA - count _fortCounts) do {
-        PUSH(_fortCounts,0);
-    };
-    _unit setVariable ["plank_deploy_fortCounts", _fortCounts, false];
+    [_unit] call plank_deploy_fnc_initFortCounts;
     PUSH(FORTS_DATA,_forData);
     PUSH(_fortCounts,0);
 
@@ -344,9 +350,10 @@ plank_deploy_fnc_addFortification = {
     FUN_ARGS_3(_unit,_fortIndex,_count);
 
     if (_fortIndex > 0 && {_fortIndex < count FORTS_DATA}) then {
+        [_unit] call plank_deploy_fnc_initFortCounts;
         DECLARE(_fortCounts) = _unit getVariable ["plank_deploy_fortCounts", [1]];
-        [] call plank_ui_fnc_initFortCombo;
         _fortCounts set [_fortIndex, (_fortCounts select _fortIndex) + _count];
+        [] call plank_ui_fnc_initFortCombo;
         [_unit] call plank_deploy_fnc_addPlankAction;
     };
 };
