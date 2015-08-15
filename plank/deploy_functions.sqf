@@ -362,13 +362,16 @@ plank_deploy_fnc_removeFortification = {
     FUN_ARGS_3(_unit,_fortIndex,_count);
 
     DECLARE(_fortCounts) = _unit getVariable ["plank_deploy_fortCounts", [1]];
-    if (_fortIndex > 0 && {_fortIndex < count FORTS_DATA} && {_fortCounts select _fortIndex > 0}) then {
+    if (_fortIndex > 0 && {_fortIndex < count FORTS_DATA} && {_fortIndex < count _fortCounts} && {_fortCounts select _fortIndex > 0}) then {
         DECLARE(_newCount) = ((_fortCounts select _fortIndex) - _count) max 0;
         _fortCounts set [_fortIndex, _newCount];
         if ([_unit] call plank_deploy_fnc_isFortsCountEmpty) then {
             [_unit] call plank_delpoy_fnc_forceRemoveAllFortifications;
         } else {
-            [_unit] call plank_deploy_fnc_forceResetPlacement;
+            if (_newCount == 0) then {
+                [] call plank_ui_fnc_selectNone;
+            };
+            [] call plank_ui_fnc_initFortCombo;
         };
     };
 };

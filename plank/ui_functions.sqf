@@ -222,6 +222,11 @@ plank_ui_fnc_initFortCombo = {
     };
 };
 
+plank_ui_fnc_selectNone = {
+    DECLARE(_index) = [DEFAULT_FORT_INDEX] call plank_ui_fnc_getComboIndexByFortIndex;
+    lbSetCurSel [SETTINGS_FORT_COMBO_IDC, _index];
+};
+
 plank_ui_fnc_getComboIndexByFortIndex = {
     FUN_ARGS_1(_fortIndex);
 
