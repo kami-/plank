@@ -182,10 +182,13 @@ class PlankSettingsDialog {
         colorFocused[] = BUTTON_BG_COLOR;
         colorShadow[] = {0, 0, 0, 0};
         colorBorder[] = {0, 0, 0, 0};
-        soundEnter[] = {"", 0.09, 1};
-        soundPush[] = {"", 0.09, 1};
-        soundClick[] = {"\ca\ui\data\sound\new1", 0.07, 1};
-        soundEscape[] = {"", 0.09, 1};
+        tooltipColorShade[] = COMBO_SELECTED_BG_COLOR;
+        tooltipColorText[] = {1, 1, 1, 1};
+        tooltipColorBox[] = {0, 0, 0, 1};
+        soundEnter[] = {"",0.1,1};
+        soundPush[] = {"",0.1,1};
+        soundClick[] = {"",0.1,1};
+        soundEscape[] = {"",0.1,1};
         x = 0;
         y = 0;
         w = 0;
@@ -206,6 +209,20 @@ class PlankSettingsDialog {
         x = RESET_BUTTON_X;
         sizeEx = FONT_SIZE;
         text = "Reset";
+    };
+
+    class TooltipTitleBase : ResetButtonBase {
+        colorBackground[] = DISABLED_COLOR;
+        colorBackgroundDisabled[] = DISABLED_COLOR;
+        colorBackgroundActive[] = DISABLED_COLOR;
+        colorFocused[] = DISABLED_COLOR;
+        offsetX = 0;
+        offsetY = 0;
+        offsetPressedX = 0;
+        offsetPressedY = 0;
+        borderSize = 0;
+        shadow = 2;
+        text = "";
     };
 
     class RscCombo {
@@ -303,6 +320,7 @@ class PlankSettingsDialog {
         sizeEx = FONT_SIZE;
         text = "Unlock";
         action = "[] call plank_ui_fnc_lockModeButtonClick";
+        tooltip = "Locks placed object in place.";
     };
 
     class PickupButton : RscButton {
@@ -317,12 +335,13 @@ class PlankSettingsDialog {
         tooltip = "Pickup your previously placed object.";
     };
 //--------------------------
-    class MoveTitle : TitleBase {
+    class MoveTitle : TooltipTitleBase {
         idc = SETTINGS_MOVE_TITLE_IDC;
         x = CONTROL_X;
         y = CONTROL_HALF_Y(TOGGLE_ROW_INDEX);
         w = MOVE_TITLE_W;
         text = "Move";
+        tooltip = "Toggle with CTRL. Move object on x/y/z axes using mouse and scrollwheel.";
     };
 
     class MoveValue : ValueBase {
@@ -334,12 +353,13 @@ class PlankSettingsDialog {
         colorText[] = {1, 0, 0, 1};
     };
 
-    class RotateTitle : TitleBase {
+    class RotateTitle : TooltipTitleBase {
         idc = SETTINGS_ROTATE_TITLE_IDC;
         x = ROTATE_TITLE_X;
         y = CONTROL_HALF_Y(TOGGLE_ROW_INDEX);
         w = ROTATE_TITLE_W;
         text = "Rotate";
+        tooltip = "Toggle with SHIFT. Rotate object on x/y/z axes using mouse and scrollwheel.";
     };
 
     class RotateValue : ValueBase {
