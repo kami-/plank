@@ -3,11 +3,10 @@
 // Magic to set default font for Arma 2 and Arma 3
 __EXEC(_plank_default_font = "puristaMedium"; _stop = false; while {isNil {call compile "blufor"} && {!_stop}} do {_plank_default_font = "Zeppelin32"; _stop = true;};)
 
-#define H_RATIO(NUM)                            (NUM * 3 / 4)
-#define TO_REAL_W(NUM)                          (NUM / safeZoneW)
-#define TO_REAL_H(NUM)                          (H_RATIO(NUM) / safeZoneH)
+#define H_RATIO(NUM)                            (NUM * 4 / 3)
+#define TO_REAL_W(NUM)                          ((NUM) * safeZoneW)
+#define TO_REAL_H(NUM)                          (H_RATIO(NUM) * safeZoneH)
 
-#define FONT_SIZE                               TO_REAL_W(0.1)
 #define DISABLED_COLOR                          {0, 0, 0, 0}
 #define DIALOG_BG_COLOR                         {0.161, 0.271, 0.275, 0.7}
 #define COMBO_SELECTED_BG_COLOR                 {0.6, 0.706, 0.729, 1}
@@ -16,44 +15,45 @@ __EXEC(_plank_default_font = "puristaMedium"; _stop = false; while {isNil {call 
 
 #define DIALOG_H                                (safeZoneH * 0.54)
 #define DIALOG_W                                (safeZoneW * 0.213)
-#define DIALOG_MARGIN_RIGHT                     TO_REAL_W(0.02)
-#define DIALOG_MARGIN_BOTTOM                    TO_REAL_H(0.02)
-#define DIALOG_PADDING_LEFT                     TO_REAL_H(0.03)
-#define DIALOG_PADDING_TOP                      TO_REAL_H(0.03)
+#define DIALOG_MARGIN_RIGHT                     TO_REAL_W(0.003)
+#define DIALOG_MARGIN_BOTTOM                    TO_REAL_H(0.003)
+#define DIALOG_PADDING_LEFT                     TO_REAL_H(0.0045)
+#define DIALOG_PADDING_TOP                      TO_REAL_H(0.0045)
 #define DIALOG_X                                safeZoneX + safeZoneW - DIALOG_W - DIALOG_MARGIN_RIGHT
 #define DIALOG_Y                                safeZoneY + safeZoneH - 1.5 * DIALOG_H - DIALOG_MARGIN_BOTTOM
 
-#define ROW_BASE_H                              TO_REAL_H(0.1)
-#define CONTROL_MARGIN_RIGHT                    TO_REAL_W(0.02)
-#define CONTROL_MARGIN_BOTTOM                   TO_REAL_H(0.03)
-#define CONTROL_GROUP_H                         (2 * ROW_BASE_H) + CONTROL_MARGIN_BOTTOM + TO_REAL_H(0.08)
-#define CONTROL_GROUP_HALF_H                    ROW_BASE_H + CONTROL_MARGIN_BOTTOM + TO_REAL_H(0.02)
+#define FONT_SIZE                               TO_REAL_W(0.015)
+#define ROW_BASE_H                              TO_REAL_H(0.015)
+#define CONTROL_MARGIN_RIGHT                    TO_REAL_W(0.003)
+#define CONTROL_MARGIN_BOTTOM                   TO_REAL_H(0.0045)
+#define CONTROL_GROUP_H                         (2 * ROW_BASE_H) + CONTROL_MARGIN_BOTTOM + TO_REAL_H(0.012)
+#define CONTROL_GROUP_HALF_H                    ROW_BASE_H + CONTROL_MARGIN_BOTTOM + TO_REAL_H(0.003)
 #define CONTROL_X                               DIALOG_X + DIALOG_PADDING_LEFT
 #define CONTROL_RIGHT_X                         safeZoneX + safeZoneW - DIALOG_MARGIN_RIGHT - DIALOG_PADDING_LEFT
 #define CONTROL_HALF_Y(ROW)                     (DIALOG_Y + DIALOG_PADDING_TOP + (CONTROL_GROUP_HALF_H) * ROW)
 #define CONTROL_Y(ROW)                          (DIALOG_Y + DIALOG_PADDING_TOP + (CONTROL_GROUP_H) * ROW) - 3 * (ROW_BASE_H + CONTROL_MARGIN_BOTTOM)
 
-#define EXPORT_BUTTON_W                         TO_REAL_W(0.209)
+#define EXPORT_BUTTON_W                         TO_REAL_W(0.03135)
 #define EXPORT_BACKGROUND_W                     (EXPORT_BUTTON_W + DIALOG_PADDING_LEFT * 2)
 #define COMBO_W                                 DIALOG_W - DIALOG_PADDING_LEFT * 2
-#define CONFIRM_BUTTON_W                        TO_REAL_W(0.24)
-#define LOCK_BUTTON_W                           TO_REAL_W(0.21)
-#define PICKUP_BUTTON_W                         TO_REAL_W(0.21)
-#define MOVE_TITLE_W                            TO_REAL_W(0.16)
-#define TOGGLE_VALUE_W                          TO_REAL_W(0.12)
-#define ROTATE_TITLE_W                          TO_REAL_W(0.2)
-#define TITLE_BASE_W                            TO_REAL_W(0.31)
+#define CONFIRM_BUTTON_W                        TO_REAL_W(0.036)
+#define LOCK_BUTTON_W                           TO_REAL_W(0.0315)
+#define PICKUP_BUTTON_W                         TO_REAL_W(0.0315)
+#define MOVE_TITLE_W                            TO_REAL_W(0.024)
+#define TOGGLE_VALUE_W                          TO_REAL_W(0.018)
+#define ROTATE_TITLE_W                          TO_REAL_W(0.03)
+#define TITLE_BASE_W                            TO_REAL_W(0.0465)
 #define TITLE_BASE_H                            ROW_BASE_H
-#define VALUE_BASE_W                            TO_REAL_W(0.3)
+#define VALUE_BASE_W                            TO_REAL_W(0.045)
 #define VALUE_BASE_H                            ROW_BASE_H
-#define HEIGHT_MODE_BUTTON_W                    TO_REAL_W(0.55)
-#define SLIDER_BASE_W                           TO_REAL_W(0.9)
+#define HEIGHT_MODE_BUTTON_W                    TO_REAL_W(0.0825)
+#define SLIDER_BASE_W                           TO_REAL_W(0.135)
 #define SLIDER_BASE_H                           ROW_BASE_H
-#define RESET_BUTTON_W                          TO_REAL_W(0.17)
+#define RESET_BUTTON_W                          TO_REAL_W(0.0255)
 #define RESET_BUTTON_H                          ROW_BASE_H
 #define EXPORT_BACKGROUND_H                     RESET_BUTTON_H + DIALOG_PADDING_LEFT
 
-#define RESET_BUTTON_X                          CONTROL_X + TITLE_BASE_W + TO_REAL_W(0.05)
+#define RESET_BUTTON_X                          CONTROL_X + TITLE_BASE_W + TO_REAL_W(0.0075)
 #define HEIGHT_MODE_BUTTON_X                    CONTROL_RIGHT_X - HEIGHT_MODE_BUTTON_W
 #define EXPORT_BUTTON_X                         CONTROL_RIGHT_X - EXPORT_BUTTON_W
 #define EXPORT_BUTTON_Y                         DIALOG_Y - RESET_BUTTON_H
@@ -62,9 +62,9 @@ __EXEC(_plank_default_font = "puristaMedium"; _stop = false; while {isNil {call 
 #define EXPORT_BUTTON_Y                         DIALOG_Y - RESET_BUTTON_H
 #define LOCK_BUTTON_X                           RESET_BUTTON_X
 #define PICKUP_BUTTON_X                         CONTROL_RIGHT_X - PICKUP_BUTTON_W
-#define MOVE_VALUE_X                            CONTROL_X + MOVE_TITLE_W + TO_REAL_W(0.05)
+#define MOVE_VALUE_X                            CONTROL_X + MOVE_TITLE_W + TO_REAL_W(0.0075)
 #define ROTATE_TITLE_X                          HEIGHT_MODE_BUTTON_X
-#define ROTATE_VALUE_X                          ROTATE_TITLE_X + ROTATE_TITLE_W + TO_REAL_W(0.05)
+#define ROTATE_VALUE_X                          ROTATE_TITLE_X + ROTATE_TITLE_W + TO_REAL_W(0.0075)
 
 
 class PlankSettingsDialog {
