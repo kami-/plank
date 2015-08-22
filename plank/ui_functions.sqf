@@ -177,8 +177,8 @@ plank_ui_fnc_updateToggleValue = {
 plank_ui_fnc_initToggleValues = {
     plank_ui_isControlToggled = false;
     plank_ui_isShiftToggled = false;
-    [SETTINGS_CTRL_VALUE_IDC, plank_ui_isControlToggled] call plank_ui_fnc_updateToggleValue;
-    [SETTINGS_SHIFT_VALUE_IDC, plank_ui_isShiftToggled] call plank_ui_fnc_updateToggleValue;
+    [SETTINGS_MOVE_VALUE_IDC, plank_ui_isControlToggled] call plank_ui_fnc_updateToggleValue;
+    [SETTINGS_ROTATE_VALUE_IDC, plank_ui_isShiftToggled] call plank_ui_fnc_updateToggleValue;
 };
 
 plank_ui_fnc_initSliders = {
@@ -291,8 +291,8 @@ plank_ui_fnc_onKeyDown = {
 
     plank_ui_isControlToggled = _ctrl && {!plank_ui_isControlToggled};
     plank_ui_isShiftToggled = _shift && {!plank_ui_isShiftToggled};
-    [SETTINGS_CTRL_VALUE_IDC, plank_ui_isControlToggled] call plank_ui_fnc_updateToggleValue;
-    [SETTINGS_SHIFT_VALUE_IDC, plank_ui_isShiftToggled] call plank_ui_fnc_updateToggleValue;
+    [SETTINGS_MOVE_VALUE_IDC, plank_ui_isControlToggled] call plank_ui_fnc_updateToggleValue;
+    [SETTINGS_ROTATE_VALUE_IDC, plank_ui_isShiftToggled] call plank_ui_fnc_updateToggleValue;
 
     false;
 };
