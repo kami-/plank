@@ -1,8 +1,5 @@
 #include "plank_macros.h"
 
-// Magic to set default font for Arma 2 and Arma 3
-__EXEC(_plank_default_font = "puristaMedium"; _stop = false; while {isNil {call compile "blufor"} && {!_stop}} do {_plank_default_font = "Zeppelin32"; _stop = true;};)
-
 #define H_RATIO(NUM)                            (NUM * 4 / 3)
 #define TO_REAL_W(NUM)                          ((NUM) * safeZoneW)
 #define TO_REAL_H(NUM)                          (H_RATIO(NUM) * safeZoneH)
@@ -22,6 +19,7 @@ __EXEC(_plank_default_font = "puristaMedium"; _stop = false; while {isNil {call 
 #define DIALOG_X                                safeZoneX + safeZoneW - DIALOG_W - DIALOG_MARGIN_RIGHT
 #define DIALOG_Y                                safeZoneY + safeZoneH - 1.5 * DIALOG_H - DIALOG_MARGIN_BOTTOM
 
+#define FONT_TYPE                               "puristaMedium"
 #define FONT_SIZE                               TO_REAL_W(0.015)
 #define ROW_BASE_H                              TO_REAL_H(0.015)
 #define CONTROL_MARGIN_RIGHT                    TO_REAL_W(0.003)
@@ -126,7 +124,7 @@ class PlankSettingsDialog {
         w = 0.1;
         style = 0;
         shadow = 2;
-        font = __EVAL(_plank_default_font);
+        font = FONT_TYPE;
         sizeEx = FONT_SIZE;
     };
 
@@ -137,7 +135,7 @@ class PlankSettingsDialog {
         style = 0;
         shadow = 2;
         fixedWidth = 0;
-        font = __EVAL(_plank_default_font);
+        font = FONT_TYPE;
         w = TITLE_BASE_W;
         h = TITLE_BASE_H;
         text = "Height";
@@ -194,7 +192,7 @@ class PlankSettingsDialog {
         w = 0;
         h = 0;
         shadow = 0;
-        font = __EVAL(_plank_default_font);
+        font = FONT_TYPE;
         sizeEx = FONT_SIZE;
         offsetX = 0.003;
         offsetY = 0.003;
@@ -246,7 +244,18 @@ class PlankSettingsDialog {
         soundExpand[] = {"",0.1,1};
         soundCollapse[] = {"",0.1,1};
         maxHistoryDelay = 1;
+        wholeHeight = TITLE_BASE_H;
         class ScrollBar {
+            color[] = {1,1,1,0.6};
+            colorActive[] = {1,1,1,1};
+            colorDisabled[] = {1,1,1,0.3};
+            shadow = 0;
+            thumb = "\ca\ui\data\ui_scrollbar_thumb_ca.paa";
+            arrowFull = "\ca\ui\data\ui_arrow_top_active_ca.paa";
+            arrowEmpty = "\ca\ui\data\ui_arrow_top_ca.paa";
+            border = "\ca\ui\data\ui_border_scroll_ca.paa";
+        };
+        class ComboScrollBar {
             color[] = {1,1,1,0.6};
             colorActive[] = {1,1,1,1};
             colorDisabled[] = {1,1,1,0.3};
@@ -260,7 +269,7 @@ class PlankSettingsDialog {
         arrowEmpty = "\ca\ui\data\ui_arrow_combo_ca.paa";
         arrowFull = "\ca\ui\data\ui_arrow_combo_active_ca.paa";
         wholeHeight = TO_REAL_H(1);
-        font = __EVAL(_plank_default_font);
+        font = FONT_TYPE;
         sizeEx = FONT_SIZE;
     };
 //--------------------------

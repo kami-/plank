@@ -4,8 +4,9 @@
 #include "logbook.h"
 
 plank_deploy_fnc_preInit = {
-    FORTS_DATA = [[FORT_COMBO_NONE_NAME, "", 0, 0, 0, {}]];
-    PUSH_ALL(FORTS_DATA,plank_deploy_manualFortData);
+    FORTS_DATA = [[FORT_COMBO_NONE_NAME, "", 0, 0, 0, ""]];
+    private _configForts = ["fortifications"] call plank_config_fnc_getBothArray;
+    PUSH_ALL(FORTS_DATA,_configForts);
 };
 
 plank_deploy_fnc_expandFortCounts = {
@@ -173,7 +174,7 @@ plank_deploy_fnc_confirmFortPlacement = {
     _fortIndex = _unit getVariable "plank_deploy_fortIndex";
     _unit setVariable ["plank_deploy_placementState", STATE_PLACEMENT_DONE, false];
     [_unit, _fort] call plank_export_fnc_addFort;
-    [_unit, _fort] call GET_FORT_CODE(_fortIndex);
+    [_unit, _fort] call compile GET_FORT_CODE(_fortIndex);
     _fort setVariable ["plank_deploy_placedByData", [_unit, _fortIndex], false];
     [_unit, _fortIndex, 1] call plank_deploy_fnc_decreaseFortCount;
     [_unit] call plank_deploy_fnc_resetFort;
