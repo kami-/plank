@@ -6,7 +6,7 @@ class CfgPatches {
         weapons[] = {};
         requiredVersion = 1.0;
         requiredAddons[] = {"CBA_MAIN"};
-        author[] = {"Kami", "Ark"};
+        author = "Kami";
         authorUrl = "https://github.com/kami-";
     };
 };
