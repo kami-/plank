@@ -199,7 +199,7 @@ plank_deploy_fnc_resetFort = {
 plank_deploy_fnc_pickupObject = {
     FUN_ARGS_2(_unit,_object);
 
-    DECLARE(_placedByData) = _object getVariable ["plank_deploy_placedByData", [objNull, _fortIndex]];
+    DECLARE(_placedByData) = _object getVariable ["plank_deploy_placedByData", [objNull, 0]];
     if (_placedByData select 0 == _unit) then {
         [_unit, _placedByData select 1, 1] call plank_deploy_fnc_addFortification;
         deleteVehicle _object;
@@ -211,7 +211,7 @@ plank_deploy_fnc_canPickupObject = {
 
     DECLARE(_canPickup) = false;
     if (!isNull _object) then {
-        DECLARE(_placedByData) = _object getVariable ["plank_deploy_placedByData", [objNull, _fortIndex]];
+        DECLARE(_placedByData) = _object getVariable ["plank_deploy_placedByData", [objNull, 0]];
         _canPickup = _placedByData select 0 == _unit;
     };
 
@@ -293,7 +293,7 @@ plank_deploy_fnc_getDistanceFromBoundingBox = {
     FUN_ARGS_1(_className);
 
     private ["_object", "_boundingBox", "_maxWidth", "_maxLength"];
-    _object = _className createVehicleLocal [0, 0, 0];
+    _object = _className createVehicleLocal [-100, -100, 100];
     _boundingBox = boundingBox _object;
     _maxWidth = abs ((_boundingBox select 1 select 0) - (_boundingBox select 0 select 0));
     _maxLength = abs ((_boundingBox select 1 select 1) - (_boundingBox select 0 select 1));

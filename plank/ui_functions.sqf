@@ -3,6 +3,11 @@
 #include "\userconfig\plank\log\ui.h"
 #include "logbook.h"
 
+#define LOCK_SHORTCUT_KEY_CODE                  33 // F
+#define PICKUP_SHORTCUT_KEY_CODE                32 // D
+#define CONFIRM_SHORTCUT_KEY_CODE               19 // R
+#define CANCEL_SHORTCUT_KEY_CODE                16 // Q
+#define VERTICAL_MODE_SHORTCUT_KEY_CODE         47 // V
 
 plank_ui_fnc_createSettingsDialog = {
     if (!dialog) then {
@@ -83,7 +88,6 @@ plank_ui_fnc_setHeightModeButton = {
     FUN_ARGS_1(_heightMode);
 
     player setVariable ["plank_deploy_heightMode", _heightMode, false];
-    ctrlSetText [SETTINGS_HEIGHT_MODE_BUTTON_IDC, STR_HEIGHT_MODES select _heightMode];
 };
 
 plank_ui_fnc_lockModeButtonClick = {
@@ -115,6 +119,12 @@ plank_ui_fnc_confirmButtonClick = {
         [] call plank_ui_fnc_initFortControls;
         [] call plank_ui_fnc_resetFortCombo;
     };
+};
+
+plank_ui_fnc_cancelButtonClick = {
+    [player] call plank_deploy_fnc_cancelFortPlacement;
+    [] call plank_ui_fnc_initFortControls;
+    [] call plank_ui_fnc_resetFortCombo;
 };
 
 plank_ui_fnc_updateHeightSliderValue = {
@@ -162,23 +172,9 @@ plank_ui_fnc_updateValue = {
     };
 };
 
-plank_ui_fnc_updateToggleValue = {
-    FUN_ARGS_2(_idc,_toggleState);
-
-    if (_toggleState) then {
-        (findDisplay SETTINGS_DIALOG_IDD displayCtrl _idc) ctrlSetTextColor [0, 1, 0, 1];
-        (findDisplay SETTINGS_DIALOG_IDD displayCtrl _idc) ctrlSetText "On";
-    } else {
-        (findDisplay SETTINGS_DIALOG_IDD displayCtrl _idc) ctrlSetTextColor [1, 0, 0, 1];
-        (findDisplay SETTINGS_DIALOG_IDD displayCtrl _idc) ctrlSetText "Off";
-    };
-};
-
 plank_ui_fnc_initToggleValues = {
-    plank_ui_isControlToggled = false;
-    plank_ui_isShiftToggled = false;
-    [SETTINGS_MOVE_VALUE_IDC, plank_ui_isControlToggled] call plank_ui_fnc_updateToggleValue;
-    [SETTINGS_ROTATE_VALUE_IDC, plank_ui_isShiftToggled] call plank_ui_fnc_updateToggleValue;
+    plank_ui_isLeftClickHeld = false;
+    plank_ui_isRotationButtonHeld = false;
 };
 
 plank_ui_fnc_initSliders = {
@@ -289,10 +285,44 @@ plank_ui_fnc_updateValueAndSlider = {
 plank_ui_fnc_onKeyDown = {
     FUN_ARGS_5(_control,_keyCode,_shift,_ctrl,_alt);
 
-    plank_ui_isControlToggled = _ctrl && {!plank_ui_isControlToggled};
-    plank_ui_isShiftToggled = _shift && {!plank_ui_isShiftToggled};
-    [SETTINGS_MOVE_VALUE_IDC, plank_ui_isControlToggled] call plank_ui_fnc_updateToggleValue;
-    [SETTINGS_ROTATE_VALUE_IDC, plank_ui_isShiftToggled] call plank_ui_fnc_updateToggleValue;
+    plank_ui_isRotationButtonHeld = _shift || {_ctrl} || {_alt};
+
+    false;
+};
+
+plank_ui_fnc_onKeyUp = {
+    FUN_ARGS_5(_control,_keyCode,_shift,_ctrl,_alt);
+
+    call {
+        if (_keyCode == LOCK_SHORTCUT_KEY_CODE) exitWith { [] call plank_ui_fnc_lockModeButtonClick; };
+        if (_keyCode == PICKUP_SHORTCUT_KEY_CODE) exitWith { [] call plank_ui_fnc_pickupButtonClick; };
+        if (_keyCode == CONFIRM_SHORTCUT_KEY_CODE) exitWith { [] call plank_ui_fnc_confirmButtonClick; };
+        if (_keyCode == CANCEL_SHORTCUT_KEY_CODE) exitWith { [] call plank_ui_fnc_cancelButtonClick; };
+        if (_keyCode == VERTICAL_MODE_SHORTCUT_KEY_CODE) exitWith { [] call plank_ui_fnc_heightModeButtonClick; };
+        if ((_keyCode == 42 && {_shift} && {!_ctrl} && {!_alt})
+            || {_keyCode == 29 && {!_shift} && {_ctrl} && {!_alt}}
+            || {_keyCode == 56 && {!_shift} && {!_ctrl} && {_alt}}) exitWith {
+            plank_ui_isRotationButtonHeld = false;
+        };
+    };
+
+    false;
+};
+
+plank_ui_fnc_onMouseButtonDown = {
+    FUN_ARGS_7(_control,_button,_x,_y,_shift,_ctrl,_alt);
+
+    plank_ui_isLeftClickHeld = _button == 0;
+
+    false;
+};
+
+plank_ui_fnc_onMouseButtonUp = {
+    FUN_ARGS_7(_control,_button,_x,_y,_shift,_ctrl,_alt);
+
+    if (_button == 0) then {
+        plank_ui_isLeftClickHeld = false;
+    };
 
     false;
 };
@@ -300,44 +330,42 @@ plank_ui_fnc_onKeyDown = {
 plank_ui_fnc_onMouseMoving = {
     FUN_ARGS_3(_display,_deltaX,_deltaY);
 
-    call {
-        if (plank_ui_isControlToggled) exitWith {
-            [-_deltaY / PLANK_HEIGHT_SENSITIVITY, MIN_HEIGHT, MAX_HEIGHT, "plank_deploy_fortRelativeHeight", SETTINGS_HEIGHT_SLIDER_IDC, SETTINGS_HEIGHT_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
-            [_deltaX / PLANK_HORIZONTAL_SENSITIVITY, MIN_HORIZONTAL_OFFSET, MAX_HORIZONTAL_OFFSET, "plank_deploy_fortHorizontalOffset", SETTINGS_HORIZONTAL_OFFSET_SLIDER_IDC, SETTINGS_HORIZONTAL_OFFSET_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
-        };
-        if (plank_ui_isShiftToggled) exitWith {
-            [_deltaY / PLANK_PITCH_SENSITIVITY, MIN_PITCH, MAX_PITCH, "plank_deploy_fortPitch", SETTINGS_PITCH_SLIDER_IDC, SETTINGS_PITCH_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
-            [_deltaX / PLANK_BANK_SENSITIVITY, MIN_BANK, MAX_BANK, "plank_deploy_fortBank", SETTINGS_BANK_SLIDER_IDC, SETTINGS_BANK_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
-        };
+    if (!plank_ui_isLeftClickHeld) exitWith {};
+    if (plank_ui_isRotationButtonHeld) then {
+        [_deltaY / PLANK_PITCH_SENSITIVITY, MIN_PITCH, MAX_PITCH, "plank_deploy_fortPitch", SETTINGS_PITCH_SLIDER_IDC, SETTINGS_PITCH_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
+        [_deltaX / PLANK_BANK_SENSITIVITY, MIN_BANK, MAX_BANK, "plank_deploy_fortBank", SETTINGS_BANK_SLIDER_IDC, SETTINGS_BANK_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
+    } else {
+        [-_deltaY / PLANK_HEIGHT_SENSITIVITY, MIN_HEIGHT, MAX_HEIGHT, "plank_deploy_fortRelativeHeight", SETTINGS_HEIGHT_SLIDER_IDC, SETTINGS_HEIGHT_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
+        [_deltaX / PLANK_HORIZONTAL_SENSITIVITY, MIN_HORIZONTAL_OFFSET, MAX_HORIZONTAL_OFFSET, "plank_deploy_fortHorizontalOffset", SETTINGS_HORIZONTAL_OFFSET_SLIDER_IDC, SETTINGS_HORIZONTAL_OFFSET_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
     };
 };
 
 plank_ui_fnc_onMouseZChanged = {
     FUN_ARGS_2(_display,_deltaY);
 
-    call {
-        if (plank_ui_isControlToggled) exitWith {
-            DECLARE(_minDistance) = GET_FORT_DISTANCE(player getVariable "plank_deploy_fortIndex");
-            [_deltaY, _minDistance, _minDistance + MAX_DISTANCE_ADD, "plank_deploy_fortDistance", SETTINGS_DISTANCE_SLIDER_IDC, SETTINGS_DISTANCE_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
-        };
-        if (plank_ui_isShiftToggled) exitWith {
-            private ["_fortIndex", "_baseDirection"];
-            _fortIndex = player getVariable "plank_deploy_fortIndex";
-            _baseDirection = GET_FORT_DIRECTION(_fortIndex);
-            [
-                _deltaY * 2,
-                _baseDirection - GET_FORT_DIRECTION_RANGE(_fortIndex) / 2,
-                _baseDirection + GET_FORT_DIRECTION_RANGE(_fortIndex) / 2,
-                "plank_deploy_fortDirection",
-                SETTINGS_DIRECTION_SLIDER_IDC,
-                SETTINGS_DIRECTION_VALUE_IDC
-            ] call plank_ui_fnc_updateValueAndSlider;
-        };
+    if (plank_ui_isRotationButtonHeld) then {
+        private ["_fortIndex", "_baseDirection"];
+        _fortIndex = player getVariable "plank_deploy_fortIndex";
+        _baseDirection = GET_FORT_DIRECTION(_fortIndex);
+        [
+            _deltaY * 2,
+            _baseDirection - GET_FORT_DIRECTION_RANGE(_fortIndex) / 2,
+            _baseDirection + GET_FORT_DIRECTION_RANGE(_fortIndex) / 2,
+            "plank_deploy_fortDirection",
+            SETTINGS_DIRECTION_SLIDER_IDC,
+            SETTINGS_DIRECTION_VALUE_IDC
+        ] call plank_ui_fnc_updateValueAndSlider;
+    } else {
+        DECLARE(_minDistance) = GET_FORT_DISTANCE(player getVariable "plank_deploy_fortIndex");
+        [_deltaY, _minDistance, _minDistance + MAX_DISTANCE_ADD, "plank_deploy_fortDistance", SETTINGS_DISTANCE_SLIDER_IDC, SETTINGS_DISTANCE_VALUE_IDC] call plank_ui_fnc_updateValueAndSlider;
     };
 };
 
 plank_ui_fnc_initDialog = {
     plank_ui_onKeyDownEhId = findDisplay 46 displayAddEventHandler ["KeyDown", "_this call plank_ui_fnc_onKeyDown;"];
+    plank_ui_onKeyUpEhId = findDisplay 46 displayAddEventHandler ["KeyUp", "_this call plank_ui_fnc_onKeyUp;"];
+    plank_ui_onMouseButtonDownEhId = findDisplay 46 displayAddEventHandler ["MouseButtonDown", "_this call plank_ui_fnc_onMouseButtonDown;"];
+    plank_ui_onMouseButtonUpEhId = findDisplay 46 displayAddEventHandler ["MouseButtonUp", "_this call plank_ui_fnc_onMouseButtonUp;"];
     plank_ui_onMouseMovingEhId = findDisplay 46 displayAddEventHandler ["MouseMoving", "_this call plank_ui_fnc_onMouseMoving;"];
     plank_ui_onMouseZChangedEhId = findDisplay 46 displayAddEventHandler ["MouseZChanged", "_this call plank_ui_fnc_onMouseZChanged;"];
     [] call plank_ui_fnc_initExportPickupButtons;
@@ -351,14 +379,13 @@ plank_ui_fnc_initExportPickupButtons = {
         (findDisplay SETTINGS_DIALOG_IDD displayCtrl SETTINGS_EXPORT_BACKGROUND_IDC) ctrlSetBackgroundColor [0, 0, 0, 0];
         ctrlEnable [SETTINGS_EXPORT_BUTTON_IDC, false];
     };
-    if !([player, cursorTarget] call plank_deploy_fnc_canPickupObject) then {
+    if !([player, cursorObject] call plank_deploy_fnc_canPickupObject) then {
         ctrlEnable [SETTINGS_PICKUP_BUTTON_IDC, false];
     };
 };
 
 plank_ui_fnc_initFortControls = {
     [] call plank_ui_fnc_initToggleValues;
-    [] call plank_ui_fnc_initToggleButtons;
     [] call plank_ui_fnc_initSliders;
     [] call plank_ui_fnc_initSliderValues;
     [] call plank_ui_fnc_initSliderTextValues;
@@ -367,6 +394,9 @@ plank_ui_fnc_initFortControls = {
 
 plank_ui_fnc_dialogOnUnload = {
     findDisplay 46 displayRemoveEventHandler ["KeyDown", plank_ui_onKeyDownEhId];
+    findDisplay 46 displayRemoveEventHandler ["KeyUp", plank_ui_onKeyUpEhId];
+    findDisplay 46 displayRemoveEventHandler ["MouseButtonDown", plank_ui_onMouseButtonDownEhId];
+    findDisplay 46 displayRemoveEventHandler ["MouseButtonUp", plank_ui_onMouseButtonUpEhId];
     findDisplay 46 displayRemoveEventHandler ["MouseMoving", plank_ui_onMouseMovingEhId];
     findDisplay 46 displayRemoveEventHandler ["MouseZChanged", plank_ui_onMouseZChangedEhId];
 };
