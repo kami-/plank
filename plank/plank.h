@@ -2,7 +2,7 @@
 #include "plank_dialog.h"
 
 class Plank {
-    isEnabled = 0;
+    isEnabled = 1;
 
     fortifications[] = {
         // Action text                      |  Classname                            |  Distance     |  Direction     |  Direction Range  |  Code
