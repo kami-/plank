@@ -317,6 +317,7 @@ plank_deploy_fnc_addNewFortification = {
 
     private ["_index", "_fortCounts"];
     _index = count FORTS_DATA;
+    _fortCounts = _unit getVariable ["plank_deploy_fortCounts", [1]];
     [_unit] call plank_deploy_fnc_initFortCounts;
     PUSH(FORTS_DATA,_forData);
     PUSH(_fortCounts,0);
