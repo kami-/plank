@@ -333,7 +333,7 @@ plank_deploy_fnc_addNewDefaultFortificationWithDistance = {
         _actualDisplayName = _className;
     };
 
-    [_unit, [_actualDisplayName, _className, _distance, 0, 360, {}]] call plank_deploy_fnc_addNewFortification;
+    [_unit, [_actualDisplayName, _className, _distance, 0, 360, ""]] call plank_deploy_fnc_addNewFortification;
 };
 
 plank_deploy_fnc_addNewDefaultFortification = {
