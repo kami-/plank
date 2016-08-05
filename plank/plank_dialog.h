@@ -224,11 +224,11 @@ class PlankSettingsDialog {
         colorText[] = {0.9, 0.9, 0.9, 1};
         colorBackground[] = {0, 0, 0, 0};
 
-        x = SHORTCUT_TEXT_X
+        x = SHORTCUT_TEXT_X;
         w = SHORTCUT_TEXT_W;
         h = ROW_BASE_H;
 
-        text = "Ctrl/Shift/Alt +"
+        text = "Ctrl/Shift/Alt +";
         sizeEx = FONT_SIZE * 0.9;
     };
 
@@ -236,7 +236,7 @@ class PlankSettingsDialog {
         style = ST_PICTURE;
         colorBackground[] = {0, 0, 0, 0};
 
-        x = SHORTCUT_PICTURE_X
+        x = SHORTCUT_PICTURE_X;
         w = SHORTCUT_PICTURE_W;
         h = SHORTCUT_PICTURE_H;
 
